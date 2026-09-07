@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Campus Food Ordering System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<header>
+
+    <h1>Campus Food Ordering System</h1>
+
+    <nav>
+
+        <a href="/">Menu</a>
+
+        <a href="/cart">Cart</a>
+
+        <a href="/history">Order History</a>
+
+    </nav>
+
+</header>
+
+
+<div class="container">
+
+    <h2>Food Menu</h2>
+
+    <div class="menu-grid">
+
+        {% for item in menu %}
+
+        <div class="food-card">
+
+            <h3>{{ item.name }}</h3>
+
+            <p class="price">
+                RM{{ "%.2f"|format(item.price) }}
+            </p>
+
+
+            <form action="/add"
+                  method="POST">
+
+                <input type="hidden"
+                       name="item_name"
+                       value="{{ item.name }}">
+
+                <input type="hidden"
+                       name="price"
+                       value="{{ item.price }}">
+
+
+                <label>
+                    Quantity
+                </label>
+
+                <input type="number"
+                       name="quantity"
+                       value="1"
+                       min="1"
+                       required>
+
+
+                <button type="submit">
+                    Add to Cart
+                </button>
+
+            </form>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <a class="main-button"
+       href="/cart">
+
+        View Cart
+
+    </a>
+
+</div>
+
+
+</body>
+
+</html>

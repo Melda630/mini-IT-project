@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Your Cart</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<header>
+
+    <h1>Campus Food Ordering System</h1>
+
+    <nav>
+
+        <a href="/">Menu</a>
+
+        <a href="/cart">Cart</a>
+
+        <a href="/history">Order History</a>
+
+    </nav>
+
+</header>
+
+
+<div class="container">
+
+    <h2>Your Cart</h2>
+
+
+    {% if cart %}
+
+        {% for item in cart %}
+
+        <div class="cart-item">
+
+            <div>
+
+                <h3>
+                    {{ loop.index }}.
+                    {{ item.name }}
+                </h3>
+
+                <p>
+                    RM{{ "%.2f"|format(item.price) }}
+                    ×
+                    {{ item.quantity }}
+                </p>
+
+                <p>
+                    Subtotal:
+                    RM{{ "%.2f"|format(item.price * item.quantity) }}
+                </p>
+
+            </div>
+
+
+            <form action="/modify"
+                  method="POST">
+
+                <input type="hidden"
+                       name="item_number"
+                       value="{{ loop.index }}">
+
+                <label>
+                    Quantity
+                </label>
+
+                <input type="number"
+                       name="quantity"
+                       value="{{ item.quantity }}"
+                       min="1"
+                       required>
+
+                <button type="submit">
+                    Update
+                </button>
+
+            </form>
+
+
+            <a class="remove-button"
+               href="/remove/{{ loop.index }}">
+
+                Remove
+
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+
+        <div class="total">
+
+            Total:
+            RM{{ "%.2f"|format(total) }}
+
+        </div>
+
+
+        <form action="/checkout"
+              method="POST">
+
+            <button class="checkout-button"
+                    type="submit">
+
+                Confirm Checkout
+
+            </button>
+
+        </form>
+
+
+    {% else %}
+
+        <p class="empty">
+            Your cart is empty.
+        </p>
+
+    {% endif %}
+
+
+    <a class="main-button"
+       href="/">
+
+        Continue Ordering
+
+    </a>
+
+</div>
+
+
+</body>
+
+</html>

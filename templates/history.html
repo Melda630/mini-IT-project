@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Order History</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<header>
+
+    <h1>Campus Food Ordering System</h1>
+
+    <nav>
+
+        <a href="/">Menu</a>
+
+        <a href="/cart">Cart</a>
+
+        <a href="/history">Order History</a>
+
+    </nav>
+
+</header>
+
+
+<div class="container">
+
+    <h2>Order History</h2>
+
+
+    {% if order_history %}
+
+        {% for order in order_history %}
+
+        <div class="order-card">
+
+            <h3>
+                Order {{ loop.index }}
+            </h3>
+
+
+            {% for item in order.items %}
+
+                <p>
+
+                    {{ item.name }}
+
+                    × {{ item.quantity }}
+
+                    =
+                    RM{{ "%.2f"|format(item.price * item.quantity) }}
+
+                </p>
+
+            {% endfor %}
+
+
+            <strong>
+
+                Total:
+                RM{{ "%.2f"|format(order.total) }}
+
+            </strong>
+
+        </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+        <p class="empty">
+            No previous orders.
+        </p>
+
+    {% endif %}
+
+
+    <a class="main-button"
+       href="/">
+
+        Back to Menu
+
+    </a>
+
+</div>
+
+
+</body>
+
+</html>

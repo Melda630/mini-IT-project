@@ -2,7 +2,7 @@ from ordering import *
 
 print("\n--- TEST 1: ADD ITEMS ---")
 
-add_to_cart("Chicken Rice", 6.00, 2)
+add_to_cart("Chicken Rice", 6.00, 1)
 add_to_cart("Iced Milo", 2.50, 1)
 
 view_cart()

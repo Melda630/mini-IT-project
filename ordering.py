@@ -6,15 +6,12 @@ order_history = []
 
 def add_to_cart(item_name, price, quantity):
     if quantity <= 0:
-        print("Invalid quantity. Please enter a quantity greater than 0.")
-        return
+        return False
 
-    # If item already exists, increase quantity
     for item in cart:
         if item["name"] == item_name:
             item["quantity"] += quantity
-            print(f"{item_name} quantity updated to {item['quantity']}.")
-            return
+            return True
 
     item = {
         "name": item_name,
@@ -23,29 +20,7 @@ def add_to_cart(item_name, price, quantity):
     }
 
     cart.append(item)
-    print(f"{item_name} x{quantity} added to cart.")
-
-
-def view_cart():
-    if len(cart) == 0:
-        print("\nYour cart is empty.")
-        return
-
-    print("\n========== YOUR CART ==========")
-
-    for i, item in enumerate(cart, start=1):
-        subtotal = item["price"] * item["quantity"]
-
-        print(
-            f"{i}. {item['name']} "
-            f"x {item['quantity']} "
-            f"@ RM{item['price']:.2f} "
-            f"= RM{subtotal:.2f}"
-        )
-
-    print("-------------------------------")
-    print(f"TOTAL: RM{calculate_total():.2f}")
-    print("================================")
+    return True
 
 
 def calculate_total():
@@ -58,109 +33,38 @@ def calculate_total():
 
 
 def modify_quantity(item_number, new_quantity):
-    if len(cart) == 0:
-        print("Cart is empty.")
-        return
-
     if item_number < 1 or item_number > len(cart):
-        print("Invalid item number.")
-        return
+        return False
 
     if new_quantity <= 0:
-        print("Invalid quantity. Please enter a quantity greater than 0.")
-        return
+        return False
 
     cart[item_number - 1]["quantity"] = new_quantity
-
-    print(
-        f"{cart[item_number - 1]['name']} quantity updated to "
-        f"{new_quantity}."
-    )
+    return True
 
 
 def remove_item(item_number):
-    if len(cart) == 0:
-        print("Cart is empty.")
-        return
-
     if item_number < 1 or item_number > len(cart):
-        print("Invalid item number.")
-        return
+        return False
 
-    removed_item = cart.pop(item_number - 1)
-
-    print(f"{removed_item['name']} removed from cart.")
-
-
-def clear_cart():
-    if len(cart) == 0:
-        print("Cart is already empty.")
-        return
-
-    cart.clear()
-    print("Cart cleared.")
+    cart.pop(item_number - 1)
+    return True
 
 
 def checkout():
     if len(cart) == 0:
-        print("\nCannot checkout. Your cart is empty.")
-        return
+        return False
 
-    print("\n========== CHECKOUT ==========")
+    completed_order = {
+        "items": [],
+        "total": calculate_total()
+    }
 
-    view_cart()
+    for item in cart:
+        completed_order["items"].append(item.copy())
 
-    while True:
-        confirm = input("\nConfirm order? (Y/N): ").strip().upper()
+    order_history.append(completed_order)
 
-        if confirm == "Y":
+    cart.clear()
 
-            completed_order = {
-                "items": [],
-                "total": calculate_total()
-            }
-
-            for item in cart:
-                completed_order["items"].append(item.copy())
-
-            order_history.append(completed_order)
-
-            print("\nOrder confirmed!")
-            print(f"Final total: RM{calculate_total():.2f}")
-
-            cart.clear()
-
-            break
-
-        elif confirm == "N":
-            print("\nOrder cancelled.")
-            break
-
-        else:
-            print("Invalid input. Please enter Y or N.")
-
-
-def view_order_history():
-    if len(order_history) == 0:
-        print("\nNo order history available.")
-        return
-
-    print("\n========== ORDER HISTORY ==========")
-
-    for order_number, order in enumerate(order_history, start=1):
-
-        print(f"\nOrder {order_number}")
-
-        for item in order["items"]:
-
-            subtotal = item["price"] * item["quantity"]
-
-            print(
-                f"{item['name']} "
-                f"x {item['quantity']} "
-                f"= RM{subtotal:.2f}"
-            )
-
-        print(f"Total: RM{order['total']:.2f}")
-
-    print("===================================")
+    return True
