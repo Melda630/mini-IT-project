@@ -1,21 +1,15 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Your Cart</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
-
 </head>
-
 
 <body>
 
@@ -24,13 +18,9 @@
     <h1>Campus Food Ordering System</h1>
 
     <nav>
-
         <a href="/">Menu</a>
-
         <a href="/cart">Cart</a>
-
         <a href="/history">Order History</a>
-
     </nav>
 
 </header>
@@ -47,25 +37,25 @@
 
         <div class="cart-item">
 
-            <div>
+            <h3>
+                {{ loop.index }}.
+                {{ item.name }}
+            </h3>
 
-                <h3>
-                    {{ loop.index }}.
-                    {{ item.name }}
-                </h3>
+            <p>
+                Price:
+                RM{{ "%.2f"|format(item.price) }}
+            </p>
 
-                <p>
-                    RM{{ "%.2f"|format(item.price) }}
-                    ×
-                    {{ item.quantity }}
-                </p>
+            <p>
+                Quantity:
+                {{ item.quantity }}
+            </p>
 
-                <p>
-                    Subtotal:
-                    RM{{ "%.2f"|format(item.price * item.quantity) }}
-                </p>
-
-            </div>
+            <p>
+                Subtotal:
+                RM{{ "%.2f"|format(item.price * item.quantity) }}
+            </p>
 
 
             <form action="/modify"
@@ -76,7 +66,7 @@
                        value="{{ loop.index }}">
 
                 <label>
-                    Quantity
+                    New Quantity
                 </label>
 
                 <input type="number"
@@ -105,10 +95,8 @@
 
 
         <div class="total">
-
             Total:
             RM{{ "%.2f"|format(total) }}
-
         </div>
 
 

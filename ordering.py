@@ -13,13 +13,12 @@ def add_to_cart(item_name, price, quantity):
             item["quantity"] += quantity
             return True
 
-    item = {
+    cart.append({
         "name": item_name,
         "price": price,
         "quantity": quantity
-    }
+    })
 
-    cart.append(item)
     return True
 
 
@@ -68,3 +67,7 @@ def checkout():
     cart.clear()
 
     return True
+
+
+def clear_cart():
+    cart.clear()

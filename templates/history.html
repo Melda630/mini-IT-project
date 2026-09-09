@@ -1,21 +1,16 @@
 <!DOCTYPE html>
-
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Order History</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
-
 </head>
-
 
 <body>
 
@@ -24,13 +19,9 @@
     <h1>Campus Food Ordering System</h1>
 
     <nav>
-
         <a href="/">Menu</a>
-
         <a href="/cart">Cart</a>
-
         <a href="/history">Order History</a>
-
     </nav>
 
 </header>
@@ -54,16 +45,15 @@
 
             {% for item in order.items %}
 
-                <p>
+            <p>
 
-                    {{ item.name }}
+                {{ item.name }}
+                × {{ item.quantity }}
 
-                    × {{ item.quantity }}
+                =
+                RM{{ "%.2f"|format(item.price * item.quantity) }}
 
-                    =
-                    RM{{ "%.2f"|format(item.price * item.quantity) }}
-
-                </p>
+            </p>
 
             {% endfor %}
 
