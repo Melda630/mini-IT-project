@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 
 from ordering import (
     cart,
@@ -13,6 +13,10 @@ from ordering import (
 
 app = Flask(__name__)
 
+app.secret_key = "campus-food-secret-key"
+
+ADMIN_ID = "admin"
+ADMIN_PASSWORD = "1234"
 
 menu = [
     {"name": "Chicken Rice", "price": 6.00},
@@ -24,11 +28,54 @@ menu = [
 
 
 @app.route("/")
-def home():
+def login_page():
+    return render_template("login.html")
+
+    
+@app.route("/guest")
+def guest():
+    session["user_type"] = "guest"
+
     return render_template(
         "index.html",
         menu=menu
     )
+
+@app.route("/admin-login", methods=["POST"])
+def admin_login():
+
+    admin_id = request.form["admin_id"]
+    password = request.form["password"]
+
+    if admin_id == ADMIN_ID and password == ADMIN_PASSWORD:
+
+        session["user_type"] = "admin"
+
+        return redirect(url_for("admin_dashboard"))
+
+    return render_template(
+        "login.html",
+        error="Invalid admin ID or password"
+    )
+
+@app.route("/admin")
+def admin_dashboard():
+
+    if session.get("user_type") != "admin":
+        return redirect(url_for("login_page"))
+
+    return render_template(
+        "admin.html",
+        menu=menu,
+        order_history=order_history
+    )
+
+@app.route("/logout")
+def logout():
+
+    session.clear()
+
+    return redirect(url_for("login_page"))
 
 
 @app.route("/add", methods=["POST"])

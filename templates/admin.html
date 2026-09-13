@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - Campus Food Ordering System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+
+    <h1>Admin Dashboard</h1>
+
+    <nav>
+        <a href="/admin">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+</header>
+
+
+<div class="container">
+
+    <h2>Welcome, Admin</h2>
+
+
+    <!-- CURRENT MENU SECTION -->
+    <div class="order-card">
+
+        <h3>Current Menu</h3>
+
+        {% if menu %}
+
+            {% for item in menu %}
+
+            <p>
+                {{ item["name"] }}
+                -
+                RM{{ "%.2f"|format(item["price"]) }}
+            </p>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>No menu items available.</p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- CUSTOMER ORDERS SECTION -->
+    <div class="order-card">
+
+        <h3>Customer Orders</h3>
+
+        {% if order_history %}
+
+            {% for order in order_history %}
+
+            <div class="admin-order">
+
+                <h4>
+                    Order {{ loop.index }}
+                </h4>
+
+                {% for item in order["items"] %}
+
+                <p>
+                    {{ item["name"] }}
+                    × {{ item["quantity"] }}
+
+                    =
+
+                    RM{{ "%.2f"|format(
+                        item["price"] * item["quantity"]
+                    ) }}
+                </p>
+
+                {% endfor %}
+
+
+                <strong>
+                    Total:
+                    RM{{ "%.2f"|format(order["total"]) }}
+                </strong>
+
+            </div>
+
+            <hr>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>No customer orders yet.</p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ADMIN INFORMATION -->
+    <div class="order-card">
+
+        <h3>Admin Functions</h3>
+
+        <p>✓ View current food menu</p>
+
+        <p>✓ View customer orders</p>
+
+        <p>✓ Monitor ordering system</p>
+
+    </div>
+
+
+    <a class="main-button"
+       href="/logout">
+        Logout
+    </a>
+
+</div>
+
+
+</body>
+
+</html>
