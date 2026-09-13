@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Food Ordering System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <h1>Campus Food Ordering System</h1>
+    <span id="customerDisplay">Customer: Guest</span>
+  </div>
+</header>
+
+<main class="container">
+
+  <section id="home" class="hero">
+    <div>
+      <p class="small-title">WELCOME</p>
+      <h2>Order your campus food easily.</h2>
+      <p>View available food items and prepare your order before collecting it.</p>
+    </div>
+
+    <div class="customer-form">
+      <label for="customerName">Enter your name</label>
+      <input id="customerName" type="text" placeholder="e.g. Melda">
+      <button onclick="startOrdering()">Start Ordering</button>
+    </div>
+  </section>
+
+  <nav class="main-menu">
+    <button onclick="showSection('home')">Home</button>
+    <button onclick="showSection('menuSection')">View Food Menu</button>
+        <img src=".C:\Users\USER\Downloads\Campus-Food-Member1-Web\Campus-Food-Member1-Web/chicken rice.jpg" alt="Chicken Rice">
+    <div class="menu-item-details">
+        <h3>Classic Chicken Rice</h3
+        <span class="price">RM6.00</span>
+    <button onclick="showSection('interactionSection')">User Interaction</button>
+    <button onclick="showSection('githubSection')">GitHub</button>
+  </nav>
+
+  <div id="message"></div>
+
+  <section id="menuSection" class="card section">
+    <div class="section-title">
+      <div>
+        <p class="small-title">MENU</p>
+        <h2>Available Food & Drinks</h2>
+      </div>
+      <button onclick="loadMenu()">Refresh Menu</button>
+    </div>
+    <div id="menu" class="food-grid"></div>
+  </section>
+
+  <section id="interactionSection" class="card section">
+    <p class="small-title">USER INTERACTION</p>
+    <h2>Quick Interaction</h2>
+    <p>Select a food item above, then choose the quantity.</p>
+
+    <div class="interaction-box">
+      <label for="foodSelect">Select Food</label>
+      <select id="foodSelect"></select>
+
+      <label for="quantity">Quantity</label>
+      <input id="quantity" type="number" min="1" value="1">
+
+      <button onclick="addSelectedItem()">Add to Order</button>
+    </div>
+
+    <div class="note">
+      This section is for Member 1's user-interface and interaction work.
+      Ordering calculations and full order management can be connected to the
+      other members' modules.
+    </div>
+  </section>
+
+  <section id="githubSection" class="card section">
+    <p class="small-title">PROJECT MANAGEMENT</p>
+    <h2>GitHub Repository Management</h2>
+
+    <div class="github-grid">
+      <div>
+        <h3>Repository Structure</h3>
+        <pre>Campus-Food-Ordering-System/
+├── index.html
+├── style.css
+├── app.js
+├── api.php
+├── db.sql
+└── README.md</pre>
+      </div>
+
+      <div>
+        <h3>Member 1 Branch</h3>
+        <p><strong>feature/menu</strong></p>
+        <p>Use this branch for the main menu, food menu and user interaction changes.</p>
+
+        <h3>Basic GitHub Workflow</h3>
+        <ol>
+          <li>Create an Issue / Task</li>
+          <li>Create a feature branch</li>
+          <li>Write and test code</li>
+          <li>Commit changes</li>
+          <li>Push to GitHub</li>
+          <li>Create Pull Request</li>
+          <li>Code review and merge</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
