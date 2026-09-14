@@ -94,7 +94,7 @@ def add_item():
         quantity
     )
 
-    return redirect(url_for("home"))
+    return redirect(url_for("guest"))
 
 
 @app.route("/cart")
