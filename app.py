@@ -6,6 +6,7 @@
 
 from flask import Flask, request, redirect
 import json
+import webbrowser
 
 app = Flask(__name__)
 
@@ -325,5 +326,7 @@ def delete_order(order_number):
 
 
 if __name__ == "__main__":
+
+    webbrowser.open("http://127.0.0.1:5000")
 
     app.run(debug=True)
