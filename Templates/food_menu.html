@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h2 class="fw-bold text-dark mb-1">Campus Food Menu 🍱</h2>
+        <p class="text-muted mb-0">Browse through available meals and beverages.</p>
+    </div>
+    <a href="{{ url_for('menu_crud') }}" class="btn btn-outline-primary btn-sm rounded-3 fw-semibold">⚙️ Manage Menu</a>
+</div>
+
+<div class="card border-0 shadow-sm p-3 mb-4 rounded-4 bg-white">
+    <div class="row g-3 align-items-center">
+        <div class="col-md-6">
+            <form method="GET" action="{{ url_for('food_menu') }}" class="input-group">
+                <input type="text" name="search" class="form-control rounded-start-3 ps-3" placeholder="Search item...">
+                <button class="btn btn-primary rounded-end-3 px-4" type="submit">🔍 Search</button>
+            </form>
+        </div>
+        <div class="col-md-6 text-md-end">
+            <div class="btn-group" role="group">
+                <a href="{{ url_for('food_menu') }}" class="btn btn-outline-dark">All</a>
+                <a href="{{ url_for('food_menu', category='Main Meal') }}" class="btn btn-outline-primary">Main Meals</a>
+                <a href="{{ url_for('food_menu', category='Beverage') }}" class="btn btn-outline-info">Beverages</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for item in items %}
+    <div class="col">
+        <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden bg-white">
+            {% if item.image %}
+            <img src="{{ url_for('static', filename=item.image) }}" class="card-img-top" alt="{{ item.name }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                <span class="text-muted fs-5">🍱 No Image Available</span>
+            </div>
+            {% endif %}
+            
+            <div class="p-4">
+                <span class="badge bg-secondary mb-3 px-3 py-2 rounded-pill">{{ item.category }}</span>
+                <h5 class="card-title fw-bold text-dark mb-2">{{ item.name }}</h5>
+                <p class="card-text text-muted small mb-4">Freshly prepared daily at campus cafeterias.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fs-4 fw-bold text-success">RM {{ "%.2f"|format(item.price) }}</span>
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success rounded-pill px-2 py-1">In Stock</span>
+                </div>
+            </div>
+            <div class="card-footer bg-light border-0 p-3 text-center">
+                <button class="btn btn-primary w-100 rounded-3 fw-bold disabled opacity-75">🛒 Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <div class="p-5 bg-white rounded-4 border">
+            <h4>No Food Items Found</h4>
+            <a href="{{ url_for('food_menu') }}" class="btn btn-primary mt-2">Reset Filter</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

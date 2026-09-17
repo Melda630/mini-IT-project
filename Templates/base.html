@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta 
+        name="viewport" 
+        content="width=device-width, initial-scale=1.0">
+    <title>
+        Campus Food Ordering System
+    </title>
+    <!-- Bootstrap 5 CSS -->
+    <link 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+        rel="stylesheet">
+    <!-- Custom CSS -->
+    <link 
+        rel="stylesheet" 
+        href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .nav-link {
+            font-weight: 500;
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #ffc107 !important;
+        }
+        .footer-bg {
+            background-color: #1a1e21;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Top Announcement Bar -->
+    <div 
+        class="bg-warning text-dark text-center py-2 fw-semibold small">
+        📢 Campus Food Ordering System — Member 1 Module Interface
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav 
+        class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top py-3">
+        <div 
+            class="container">
+            <a 
+                class="navbar-brand text-warning fs-4 d-flex align-items-center gap-2" 
+                href="{{ url_for('home') }}">
+                <span>🍱</span> 
+                Campus Eats
+            </a>
+            
+            <button 
+                class="navbar-toggler border-0" 
+                type="button" 
+                data-bs-toggle="collapse" 
+                data-bs-target="#navbarNav">
+                <span 
+                    class="navbar-toggler-icon">
+                </span>
+            </button>
+            
+            <div 
+                class="collapse navbar-collapse" 
+                id="navbarNav">
+                <ul 
+                    class="navbar-nav ms-auto align-items-center">
+                    <li 
+                        class="nav-item">
+                        <a 
+                            class="nav-link text-white" 
+                            href="{{ url_for('home') }}">
+                            🏠 Main Menu
+                        </a>
+                    </li>
+                    <li 
+                        class="nav-item">
+                        <a 
+                            class="nav-link text-white" 
+                            href="{{ url_for('food_menu') }}">
+                            🍽️ Food Menu
+                        </a>
+                    </li>
+                    <li 
+                        class="nav-item">
+                        <a 
+                            class="nav-link text-white" 
+                            href="{{ url_for('menu_crud') }}">
+                            🛠️ Menu CRUD
+                        </a>
+                    </li>
+                    <li 
+                        class="nav-item">
+                        <a 
+                            class="nav-link text-white" 
+                            href="{{ url_for('user_interaction') }}">
+                            💬 User Interaction
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Dynamic Content Block -->
+    <main 
+        class="container my-5 flex-grow-1">
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div 
+                        class="alert alert-success alert-dismissible fade show shadow-sm rounded-3 mb-4 border-0 border-start border-success border-4" 
+                        role="alert">
+                        <div 
+                            class="fw-semibold">
+                            ✅ {{ message }}
+                        </div>
+                        <button 
+                            type="button" 
+                            class="btn-close" 
+                            data-bs-dismiss="alert" 
+                            aria-label="Close">
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer 
+        class="footer-bg text-white pt-5 pb-4 mt-auto">
+        <div 
+            class="container">
+            <div 
+                class="row g-4">
+                <div 
+                    class="col-md-6">
+                    <h5 
+                        class="fw-bold text-warning mb-3">
+                        🎓 Campus Food Ordering System
+                    </h5>
+                    <p 
+                        class="text-secondary small mb-0">
+                        Designed for university students and cafeteria operators to reduce queue wait times and manage menu items efficiently.
+                    </p>
+                </div>
+                <div 
+                    class="col-md-6 text-md-end">
+                    <h6 
+                        class="fw-bold text-light mb-2">
+                        Project Scope
+                    </h6>
+                    <p 
+                        class="text-secondary small mb-1">
+                        Member 1: Main Menu, Food Menu, Menu CRUD & User Interaction
+                    </p>
+                    <p 
+                        class="text-secondary small mb-0">
+                        Developed using Python Flask Framework
+                    </p>
+                </div>
+            </div>
+            <hr 
+                class="border-secondary my-4">
+            <div 
+                class="text-center text-secondary small">
+                <p 
+                    class="mb-0">
+                    &copy; 2026 Campus Food Ordering System. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script 
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+    </script>
+</body>
+</html>

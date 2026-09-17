@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Page Header -->
+<div 
+    class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h2 
+            class="fw-bold text-dark mb-1">
+            Menu Management System (CRUD) 🛠️
+        </h2>
+        <p 
+            class="text-muted mb-0">
+            Add or delete campus food menu items in real-time.
+        </p>
+    </div>
+    <div>
+        <a 
+            href="{{ url_for('food_menu') }}" 
+            class="btn btn-outline-secondary rounded-3 px-3">
+            👁️ View Public Menu
+        </a>
+    </div>
+</div>
+
+<div 
+    class="row g-4">
+    <!-- Left Column: Add Item Form -->
+    <div 
+        class="col-lg-4">
+        <div 
+            class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <div 
+                class="border-bottom pb-3 mb-3">
+                <h5 
+                    class="fw-bold text-primary mb-1">
+                    ➕ Add New Menu Item
+                </h5>
+                <small 
+                    class="text-muted">
+                    Fill in the form to update live menu.
+                </small>
+            </div>
+            
+            <form 
+                method="POST" 
+                action="{{ url_for('menu_crud') }}">
+                <div 
+                    class="mb-3">
+                    <label 
+                        class="form-label fw-semibold text-dark">
+                        Item Name
+                    </label>
+                    <input 
+                        type="text" 
+                        name="name" 
+                        class="form-control rounded-3" 
+                        required 
+                        placeholder="e.g. Fried Noodles">
+                </div>
+                
+                <div 
+                    class="mb-3">
+                    <label 
+                        class="form-label fw-semibold text-dark">
+                        Category Selection
+                    </label>
+                    <select 
+                        name="category" 
+                        class="form-select rounded-3" 
+                        required>
+                        <option 
+                            value="" 
+                            disabled 
+                            selected>
+                            Select category...
+                        </option>
+                        <option 
+                            value="Main Meal">
+                            Main Meal
+                        </option>
+                        <option 
+                            value="Beverage">
+                            Beverage
+                        </option>
+                    </select>
+                </div>
+
+                <div 
+                    class="mb-4">
+                    <label 
+                        class="form-label fw-semibold text-dark">
+                        Price (RM)
+                    </label>
+                    <div 
+                        class="input-group">
+                        <span 
+                            class="input-group-text bg-light fw-bold">
+                            RM
+                        </span>
+                        <input 
+                            type="number" 
+                            step="0.01" 
+                            min="0.50" 
+                            name="price" 
+                            class="form-control rounded-end-3" 
+                            required 
+                            placeholder="5.50">
+                    </div>
+                </div>
+
+                <button 
+                    type="submit" 
+                    class="btn btn-success w-100 rounded-3 py-2 fw-bold shadow-sm">
+                    💾 Save Item to Menu
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right Column: Menu Table -->
+    <div 
+        class="col-lg-8">
+        <div 
+            class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+            <div 
+                class="card-header bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+                <h6 
+                    class="fw-bold mb-0">
+                    📋 Live Active Menu Inventory
+                </h6>
+                <span 
+                    class="badge bg-warning text-dark">
+                    {{ items|length }} Items Listed
+                </span>
+            </div>
+            
+            <div 
+                class="table-responsive p-3">
+                <table 
+                    class="table table-hover align-middle mb-0">
+                    <thead 
+                        class="table-light">
+                        <tr>
+                            <th 
+                                class="py-3">
+                                ID
+                            </th>
+                            <th 
+                                class="py-3">
+                                Item Details
+                            </th>
+                            <th 
+                                class="py-3">
+                                Category
+                            </th>
+                            <th 
+                                class="py-3">
+                                Price
+                            </th>
+                            <th 
+                                class="py-3 text-end">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td 
+                                class="fw-bold text-muted">
+                                #{{ item.id }}
+                            </td>
+                            <td>
+                                <div 
+                                    class="fw-bold text-dark">
+                                    {{ item.name }}
+                                </div>
+                            </td>
+                            <td>
+                                <span 
+                                    class="badge bg-info bg-opacity-10 text-info border border-info rounded-pill px-3 py-1">
+                                    {{ item.category }}
+                                </span>
+                            </td>
+                            <td 
+                                class="fw-bold text-success">
+                                RM {{ "%.2f"|format(item.price) }}
+                            </td>
+                            <td 
+                                class="text-end">
+                                <a 
+                                    href="{{ url_for('delete_menu_item', item_id=item.id) }}" 
+                                    class="btn btn-outline-danger btn-sm rounded-3 px-3" 
+                                    onclick="return confirm('Delete {{ item.name }}?')">
+                                    🗑️ Delete
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

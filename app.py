@@ -1,117 +1,68 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
+from menu_operations import (
+    get_all_items,
+    filter_menu_items,
+    add_menu_item,
+    delete_menu_item_by_id
+)
 
 app = Flask(__name__)
+app.secret_key = "campus_food_ordering_system_secret_key"
 
-# -----------------------------
-# FOOD MENU
-# -----------------------------
-
-food_menu = [
-    {
-        "id": 1,
-        "name": "Chicken Rice",
-        "category": "Main Meal",
-        "price": 6.00
-    },
-    {
-        "id": 2,
-        "name": "Nasi Lemak",
-        "category": "Main Meal",
-        "price": 5.00
-    },
-    {
-        "id": 3,
-        "name": "Fried Noodles",
-        "category": "Main Meal",
-        "price": 5.50
-    },
-    {
-        "id": 4,
-        "name": "Iced Milo",
-        "category": "Beverage",
-        "price": 2.50
-    },
-    {
-        "id": 5,
-        "name": "Mineral Water",
-        "category": "Beverage",
-        "price": 1.50
-    }
-]
-
-
-# -----------------------------
-# MAIN MENU
-# -----------------------------
 
 @app.route("/")
-def main_menu():
-    return render_template(
-        "index.html",
-        food_menu=food_menu
+def home():
+    return render_template("index.html")
+
+
+@app.route("/food_menu", methods=["GET"])
+def food_menu():
+    search_query = request.args.get("search", "").strip()
+    category_filter = request.args.get("category", "").strip()
+
+    filtered_items = filter_menu_items(
+        category_filter=category_filter,
+        search_query=search_query
     )
 
-
-# -----------------------------
-# VIEW FOOD MENU
-# -----------------------------
-
-@app.route("/food-menu")
-def view_food_menu():
-    return render_template(
-        "food_menu.html",
-        food_menu=food_menu
-    )
+    return render_template("food_menu.html", items=filtered_items)
 
 
-# -----------------------------
-# USER INTERACTION
-# -----------------------------
-
-@app.route("/order", methods=["GET", "POST"])
-def order():
-
-    message = ""
-
+@app.route("/menu_crud", methods=["GET", "POST"])
+def menu_crud():
     if request.method == "POST":
+        item_name = request.form.get("name", "")
+        item_category = request.form.get("category", "")
+        item_price = request.form.get("price", "0")
 
-        customer_name = request.form.get("customer_name")
-        food_id = request.form.get("food_id")
-        quantity = request.form.get("quantity")
+        success, message = add_menu_item(item_name, item_category, item_price)
+        flash(message)
 
-        # Check customer name
-        if customer_name == "":
-            message = "Please enter your name."
+        return redirect(url_for("menu_crud"))
 
-        # Check food selection
-        elif food_id == "":
-            message = "Please select a food item."
+    items = get_all_items()
+    return render_template("menu_crud.html", items=items)
 
-        # Check quantity
-        elif quantity == "":
-            message = "Please enter quantity."
 
+@app.route("/delete_menu_item/<int:item_id>")
+def delete_menu_item(item_id):
+    success, message = delete_menu_item_by_id(item_id)
+    flash(message)
+    return redirect(url_for("menu_crud"))
+
+
+@app.route("/user_interaction", methods=["GET", "POST"])
+def user_interaction():
+    if request.method == "POST":
+        feedback_text = request.form.get("feedback", "").strip()
+        if feedback_text:
+            flash("Thank you! Your feedback/query has been submitted successfully.")
         else:
-            message = (
-                "Order received! "
-                + customer_name
-                + " selected food item "
-                + food_id
-                + " with quantity "
-                + quantity
-                + "."
-            )
+            flash("Please enter a message before submitting.")
+        return redirect(url_for("user_interaction"))
 
-    return render_template(
-        "order.html",
-        food_menu=food_menu,
-        message=message
-    )
+    return render_template("user_interaction.html")
 
-
-# -----------------------------
-# RUN APPLICATION
-# -----------------------------
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5000)

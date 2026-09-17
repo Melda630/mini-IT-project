@@ -1,119 +1,193 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campus Food Ordering System</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+{% extends 'base.html' %}
 
-<header>
-  <div class="container nav">
-    <h1>Campus Food Ordering System</h1>
-    <span id="customerDisplay">Customer: Guest</span>
-  </div>
-</header>
+{% block content %}
+<!-- Main Hero Section -->
+<div 
+    class="p-5 mb-4 rounded-4 shadow-sm text-white" 
+    style="background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);">
+    <div 
+        class="container-fluid py-4">
+        <span 
+            class="badge bg-warning text-dark mb-3 px-3 py-2 rounded-pill fw-bold">
+            🎓 Official Cafeteria Portal
+        </span>
+        <h1 
+            class="display-4 fw-bold mb-3">
+            Skip the Cafeteria Queue! 🍱
+        </h1>
+        <p 
+            class="fs-5 opacity-90 mb-4" 
+            style="max-width: 700px;">
+            Order your favorite meals, drinks, and daily snacks easily before your classes start. Enjoy fast pickup and structured menu navigation.
+        </p>
+        <div 
+            class="d-flex gap-3 flex-wrap">
+            <a 
+                href="{{ url_for('food_menu') }}" 
+                class="btn btn-warning btn-lg px-4 fw-bold rounded-3 shadow-sm">
+                🍽️ Explore Food Menu
+            </a>
+            <a 
+                href="{{ url_for('user_interaction') }}" 
+                class="btn btn-outline-light btn-lg px-4 rounded-3">
+                💬 Submit Feedback
+            </a>
+        </div>
+    </div>
+</div>
 
-<main class="container">
+<!-- Quick Statistics -->
+<div 
+    class="row text-center my-5 py-4 bg-white rounded-4 shadow-sm border">
+    <div 
+        class="col-md-3 border-end">
+        <h2 
+            class="fw-bold text-primary display-6 mb-1">
+            5+
+        </h2>
+        <p 
+            class="text-muted mb-0 fw-medium">
+            Active Menu Items
+        </p>
+    </div>
+    <div 
+        class="col-md-3 border-end">
+        <h2 
+            class="fw-bold text-success display-6 mb-1">
+            RM 5.00
+        </h2>
+        <p 
+            class="text-muted mb-0 fw-medium">
+            Average Meal Cost
+        </p>
+    </div>
+    <div 
+        class="col-md-3 border-end">
+        <h2 
+            class="fw-bold text-warning display-6 mb-1">
+            10 Mins
+        </h2>
+        <p 
+            class="text-muted mb-0 fw-medium">
+            Avg. Preparation
+        </p>
+    </div>
+    <div 
+        class="col-md-3">
+        <h2 
+            class="fw-bold text-danger display-6 mb-1">
+            100%
+        </h2>
+        <p 
+            class="text-muted mb-0 fw-medium">
+            Student Friendly
+        </p>
+    </div>
+</div>
 
-  <section id="home" class="hero">
-    <div>
-      <p class="small-title">WELCOME</p>
-      <h2>Order your campus food easily.</h2>
-      <p>View available food items and prepare your order before collecting it.</p>
+<!-- Key Features Grid -->
+<div 
+    class="my-5">
+    <div 
+        class="text-center mb-5">
+        <h2 
+            class="fw-bold text-dark mb-2">
+            System Features Breakdown
+        </h2>
+        <p 
+            class="text-muted">
+            Designed to improve the daily campus dining experience
+        </p>
     </div>
 
-    <div class="customer-form">
-      <label for="customerName">Enter your name</label>
-      <input id="customerName" type="text" placeholder="e.g. Melda">
-      <button onclick="startOrdering()">Start Ordering</button>
+    <div 
+        class="row g-4">
+        <!-- Feature 1 -->
+        <div 
+            class="col-md-4">
+            <div 
+                class="card h-100 border-0 shadow-sm p-4 rounded-4 bg-white">
+                <div 
+                    class="card-body">
+                    <div 
+                        class="fs-1 text-primary mb-3">
+                        📋
+                    </div>
+                    <h4 
+                        class="fw-bold mb-2">
+                        View Food Menu
+                    </h4>
+                    <p 
+                        class="text-muted mb-0">
+                        Detailed display of available food and beverage items along with categories and prices.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div 
+            class="col-md-4">
+            <div 
+                class="card h-100 border-0 shadow-sm p-4 rounded-4 bg-white">
+                <div 
+                    class="card-body">
+                    <div 
+                        class="fs-1 text-success mb-3">
+                        🛠️
+                    </div>
+                    <h4 
+                        class="fw-bold mb-2">
+                        Menu CRUD System
+                    </h4>
+                    <p 
+                        class="text-muted mb-0">
+                        Admin capability to add new meals, update current details, or remove out-of-stock menu items.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div 
+            class="col-md-4">
+            <div 
+                class="card h-100 border-0 shadow-sm p-4 rounded-4 bg-white">
+                <div 
+                    class="card-body">
+                    <div 
+                        class="fs-1 text-warning mb-3">
+                        💬
+                    </div>
+                    <h4 
+                        class="fw-bold mb-2">
+                        User Interaction
+                    </h4>
+                    <p 
+                        class="text-muted mb-0">
+                        Direct interaction hub for students to submit food requests and support feedback.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-  </section>
+</div>
 
-  <nav class="main-menu">
-    <button onclick="showSection('home')">Home</button>
-    <button onclick="showSection('menuSection')">View Food Menu</button>
-        <img src=".C:\Users\USER\Downloads\Campus-Food-Member1-Web\Campus-Food-Member1-Web/chicken rice.jpg" alt="Chicken Rice">
-    <div class="menu-item-details">
-        <h3>Classic Chicken Rice</h3
-        <span class="price">RM6.00</span>
-    <button onclick="showSection('interactionSection')">User Interaction</button>
-    <button onclick="showSection('githubSection')">GitHub</button>
-  </nav>
-
-  <div id="message"></div>
-
-  <section id="menuSection" class="card section">
-    <div class="section-title">
-      <div>
-        <p class="small-title">MENU</p>
-        <h2>Available Food & Drinks</h2>
-      </div>
-      <button onclick="loadMenu()">Refresh Menu</button>
-    </div>
-    <div id="menu" class="food-grid"></div>
-  </section>
-
-  <section id="interactionSection" class="card section">
-    <p class="small-title">USER INTERACTION</p>
-    <h2>Quick Interaction</h2>
-    <p>Select a food item above, then choose the quantity.</p>
-
-    <div class="interaction-box">
-      <label for="foodSelect">Select Food</label>
-      <select id="foodSelect"></select>
-
-      <label for="quantity">Quantity</label>
-      <input id="quantity" type="number" min="1" value="1">
-
-      <button onclick="addSelectedItem()">Add to Order</button>
-    </div>
-
-    <div class="note">
-      This section is for Member 1's user-interface and interaction work.
-      Ordering calculations and full order management can be connected to the
-      other members' modules.
-    </div>
-  </section>
-
-  <section id="githubSection" class="card section">
-    <p class="small-title">PROJECT MANAGEMENT</p>
-    <h2>GitHub Repository Management</h2>
-
-    <div class="github-grid">
-      <div>
-        <h3>Repository Structure</h3>
-        <pre>Campus-Food-Ordering-System/
-├── index.html
-├── style.css
-├── app.js
-├── api.php
-├── db.sql
-└── README.md</pre>
-      </div>
-
-      <div>
-        <h3>Member 1 Branch</h3>
-        <p><strong>feature/menu</strong></p>
-        <p>Use this branch for the main menu, food menu and user interaction changes.</p>
-
-        <h3>Basic GitHub Workflow</h3>
-        <ol>
-          <li>Create an Issue / Task</li>
-          <li>Create a feature branch</li>
-          <li>Write and test code</li>
-          <li>Commit changes</li>
-          <li>Push to GitHub</li>
-          <li>Create Pull Request</li>
-          <li>Code review and merge</li>
-        </ol>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<script src="app.js"></script>
-</body>
-</html>
+<!-- Info Banner -->
+<div 
+    class="bg-white p-5 rounded-4 shadow-sm border text-center my-5">
+    <h3 
+        class="fw-bold text-dark mb-2">
+        Have Questions or Menu Suggestions?
+    </h3>
+    <p 
+        class="text-muted mb-4">
+        Submit your queries through our dedicated interaction page.
+    </p>
+    <a 
+        href="{{ url_for('user_interaction') }}" 
+        class="btn btn-dark btn-lg px-4 rounded-3">
+        Contact Cafeteria Support
+    </a>
+</div>
+{% endblock %}
