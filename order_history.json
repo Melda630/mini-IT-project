@@ -1,1 +1,40 @@
-[]
+[
+    {
+        "items": [
+            {
+                "name": "Chicken Rice",
+                "price": 6.0,
+                "quantity": 2
+            }
+        ],
+        "total": 12.0,
+        "table_number": 1
+    },
+    {
+        "items": [
+            {
+                "name": "Nasi Lemak",
+                "price": 5.0,
+                "quantity": 1
+            }
+        ],
+        "total": 5.0,
+        "table_number": 2
+    },
+    {
+        "items": [
+            {
+                "name": "Fried Noodles",
+                "price": 5.5,
+                "quantity": 1
+            },
+            {
+                "name": "Iced Milo",
+                "price": 2.5,
+                "quantity": 2
+            }
+        ],
+        "total": 10.5,
+        "table_number": 3
+    }
+]
