@@ -14,13 +14,26 @@
 <body>
 
 <header>
+
     <h1>Campus Food Ordering System</h1>
 
-    <nav>
-        <a href="{{ url_for('guest') }}">Menu</a>
-        <a href="/cart">Cart</a>
-        <a href="/history">Order History</a>
-    </nav>
+    <nav class="top-nav">
+
+    <a href="{{ url_for('home') }}">
+        Menu
+    </a>
+
+    <a href="{{ url_for('history') }}">
+        Order History
+    </a>
+
+    <a href="{{ url_for('admin_login_page') }}">
+        Admin Dashboard
+    </a>
+
+</nav>
+
+
 </header>
 
 
@@ -73,11 +86,46 @@
 
     </div>
 
+    {% if cart_count > 0 %}
+
+<a href="{{ url_for('view_cart') }}"
+   class="floating-cart">
+
+    <div class="floating-cart-left">
+
+        <span class="cart-icon">🛒</span>
+
+        <div>
+            <strong>
+                {{ cart_count }} item{% if cart_count != 1 %}s{% endif %}
+            </strong>
+
+            <span class="cart-label">
+                Current Cart
+            </span>
+        </div>
+
+    </div>
+
+    <div class="floating-cart-right">
+
+        <strong>
+            RM{{ "%.2f"|format(cart_total) }}
+        </strong>
+
+        <span>
+            View Cart →
+        </span>
+
+    </div>
+
+</a>
+
+{% endif %}
 
     <a class="main-button"
        href="/cart">
 
-        View Cart
 
     </a>
 

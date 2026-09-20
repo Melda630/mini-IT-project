@@ -28,29 +28,38 @@ menu = [
 
 
 @app.route("/")
-def login_page():
-    return render_template("login.html")
+def home():
 
-    
-@app.route("/guest")
-def guest():
-    session["user_type"] = "guest"
+    if "user_type" not in session:
+        session["user_type"] = "guest"
+
+    cart_count = sum(item["quantity"] for item in cart)
+    cart_total = calculate_total()
 
     return render_template(
         "index.html",
-        menu=menu
+        menu=menu,
+        cart_count=cart_count,
+        cart_total=cart_total
     )
+    
 
-@app.route("/admin-login", methods=["POST"])
+
+    
+
+@app.route("/admin-login")
+def admin_login_page():
+    return render_template("login.html")
+
+
+@app.route("/admin-login-submit", methods=["POST"])
 def admin_login():
 
     admin_id = request.form["admin_id"]
     password = request.form["password"]
 
     if admin_id == ADMIN_ID and password == ADMIN_PASSWORD:
-
         session["user_type"] = "admin"
-
         return redirect(url_for("admin_dashboard"))
 
     return render_template(
@@ -58,24 +67,27 @@ def admin_login():
         error="Invalid admin ID or password"
     )
 
+
 @app.route("/admin")
 def admin_dashboard():
 
     if session.get("user_type") != "admin":
-        return redirect(url_for("login_page"))
+        return redirect(url_for("admin_login_page"))
 
     return render_template(
         "admin.html",
         menu=menu,
         order_history=order_history
+
     )
+
 
 @app.route("/logout")
 def logout():
 
     session.clear()
 
-    return redirect(url_for("login_page"))
+    return redirect(url_for("home"))
 
 
 @app.route("/add", methods=["POST"])
@@ -94,7 +106,7 @@ def add_item():
         quantity
     )
 
-    return redirect(url_for("guest"))
+    return redirect(url_for("home"))
 
 
 @app.route("/cart")
