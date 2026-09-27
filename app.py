@@ -3,6 +3,7 @@ from menu_operations import (
     get_all_items,
     filter_menu_items,
     add_menu_item,
+    update_menu_item_by_id,
     delete_menu_item_by_id
 )
 
@@ -35,6 +36,25 @@ def menu_crud():
         item_category = request.form.get("category", "")
         item_price = request.form.get("price", "0")
 
+        # Basic Input Validation Checks
+        if not item_name.strip():
+            flash("Error: Item name cannot be empty.")
+            return redirect(url_for("menu_crud"))
+        
+        if not item_category.strip():
+            flash("Error: Please select a category.")
+            return redirect(url_for("menu_crud"))
+
+        try:
+            price_val = float(item_price)
+            if price_val <= 0:
+                flash("Error: Price must be a positive number greater than 0.")
+                return redirect(url_for("menu_crud"))
+        except ValueError:
+            flash("Error: Invalid price format. Please enter a valid number.")
+            return redirect(url_for("menu_crud"))
+
+        # Add item if validation passes
         success, message = add_menu_item(item_name, item_category, item_price)
         flash(message)
 
@@ -42,6 +62,31 @@ def menu_crud():
 
     items = get_all_items()
     return render_template("menu_crud.html", items=items)
+
+
+@app.route("/update_menu_item/<int:item_id>", methods=["POST"])
+def update_menu_item(item_id):
+    item_name = request.form.get("name", "")
+    item_category = request.form.get("category", "")
+    item_price = request.form.get("price", "0")
+
+    # Input Validation for Update
+    if not item_name.strip():
+        flash("Error: Item name cannot be empty.")
+        return redirect(url_for("menu_crud"))
+
+    try:
+        price_val = float(item_price)
+        if price_val <= 0:
+            flash("Error: Price must be greater than 0.")
+            return redirect(url_for("menu_crud"))
+    except ValueError:
+        flash("Error: Invalid price format.")
+        return redirect(url_for("menu_crud"))
+
+    success, message = update_menu_item_by_id(item_id, item_name, item_category, item_price)
+    flash(message)
+    return redirect(url_for("menu_crud"))
 
 
 @app.route("/delete_menu_item/<int:item_id>")

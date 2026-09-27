@@ -93,6 +93,32 @@ def add_menu_item(name, category, price_str):
     return True, f"Successfully added '{name}' to the menu!"
 
 
+def update_menu_item_by_id(item_id, name, category, price_str):
+    """Updates an existing menu item by ID."""
+    global menu_database
+
+    name = name.strip()
+    category = category.strip()
+
+    try:
+        price = float(price_str)
+    except (ValueError, TypeError):
+        return False, "Invalid price format."
+
+    if not name or price <= 0:
+        return False, "Name cannot be empty and price must be greater than 0."
+
+    for item in menu_database:
+        if item["id"] == item_id:
+            item["name"] = name
+            if category:
+                item["category"] = category
+            item["price"] = price
+            return True, f"Menu item '{name}' updated successfully!"
+
+    return False, "Item not found."
+
+
 def delete_menu_item_by_id(item_id):
     """Deletes an item from the menu by ID."""
     global menu_database
