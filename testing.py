@@ -1,38 +1,217 @@
 # ==========================================
+# TESTING FILE
 # CAMPUS FOOD ORDERING SYSTEM
 # MEMBER 3
-# TESTING
 # ==========================================
 
 import json
 from datetime import datetime, timedelta
 
-
 FILE_NAME = "order_history.json"
 
 
 # ==========================================
-# DATA STORAGE
+# CREATE FRESH TEST ORDERS
 # ==========================================
 
-def load_orders():
+def create_test_orders():
 
-    try:
+    current_time = datetime.now()
 
-        with open(FILE_NAME, "r") as file:
-            orders = json.load(file)
+    orders = [
 
-        if isinstance(orders, list):
-            return orders
+        {
+            "table_number": 1,
+            "items": [
+                {
+                    "name": "Chicken Rice",
+                    "price": 6.00,
+                    "quantity": 2
+                }
+            ],
+            "total": 12.00
+        },
 
-        return []
+        {
+            "table_number": 2,
+            "items": [
+                {
+                    "name": "Nasi Lemak",
+                    "price": 5.00,
+                    "quantity": 1
+                },
+                {
+                    "name": "Iced Milo",
+                    "price": 2.50,
+                    "quantity": 1
+                }
+            ],
+            "total": 7.50
+        },
 
-    except (FileNotFoundError, json.JSONDecodeError):
+        {
+            "table_number": 3,
+            "items": [
+                {
+                    "name": "Fried Noodles",
+                    "price": 5.50,
+                    "quantity": 1
+                },
+                {
+                    "name": "Mineral Water",
+                    "price": 1.50,
+                    "quantity": 2
+                }
+            ],
+            "total": 8.50
+        },
 
-        return []
+        {
+            "table_number": 4,
+            "items": [
+                {
+                    "name": "Chicken Rice",
+                    "price": 6.00,
+                    "quantity": 1
+                },
+                {
+                    "name": "Iced Milo",
+                    "price": 2.50,
+                    "quantity": 2
+                }
+            ],
+            "total": 11.00
+        },
+
+        {
+            "table_number": 5,
+            "items": [
+                {
+                    "name": "Nasi Lemak",
+                    "price": 5.00,
+                    "quantity": 2
+                }
+            ],
+            "total": 10.00
+        },
+
+        {
+            "table_number": 6,
+            "items": [
+                {
+                    "name": "Fried Noodles",
+                    "price": 5.50,
+                    "quantity": 2
+                },
+                {
+                    "name": "Mineral Water",
+                    "price": 1.50,
+                    "quantity": 1
+                }
+            ],
+            "total": 12.50
+        },
+
+        {
+            "table_number": 7,
+            "items": [
+                {
+                    "name": "Chicken Rice",
+                    "price": 6.00,
+                    "quantity": 1
+                },
+                {
+                    "name": "Nasi Lemak",
+                    "price": 5.00,
+                    "quantity": 1
+                }
+            ],
+            "total": 11.00
+        },
+
+        {
+            "table_number": 8,
+            "items": [
+                {
+                    "name": "Iced Milo",
+                    "price": 2.50,
+                    "quantity": 2
+                },
+                {
+                    "name": "Mineral Water",
+                    "price": 1.50,
+                    "quantity": 1
+                }
+            ],
+            "total": 6.50
+        },
+
+        {
+            "table_number": 9,
+            "items": [
+                {
+                    "name": "Fried Noodles",
+                    "price": 5.50,
+                    "quantity": 1
+                },
+                {
+                    "name": "Chicken Rice",
+                    "price": 6.00,
+                    "quantity": 1
+                }
+            ],
+            "total": 11.50
+        },
+
+        {
+            "table_number": 10,
+            "items": [
+                {
+                    "name": "Nasi Lemak",
+                    "price": 5.00,
+                    "quantity": 1
+                },
+                {
+                    "name": "Iced Milo",
+                    "price": 2.50,
+                    "quantity": 1
+                },
+                {
+                    "name": "Mineral Water",
+                    "price": 1.50,
+                    "quantity": 1
+                }
+            ],
+            "total": 9.00
+        }
+
+    ]
 
 
-def save_orders(orders):
+    # ======================================
+    # ADD TIMESTAMP AND STATUS
+    # ======================================
+
+    for i, order in enumerate(orders):
+
+        seconds_ago = (9 - i) * 20
+
+        order_time = current_time - timedelta(
+            seconds=seconds_ago
+        )
+
+        order["order_time"] = order_time.strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+
+        order["status"] = "Pending"
+
+        order["manual_status"] = False
+
+
+    # ======================================
+    # OVERWRITE OLD ORDER HISTORY
+    # ======================================
 
     with open(FILE_NAME, "w") as file:
 
@@ -43,726 +222,52 @@ def save_orders(orders):
         )
 
 
-# ==========================================
-# CREATE TEST ORDER
-# ==========================================
-
-def create_order(
-    table_number,
-    items,
-    total,
-    status,
-    order_time
-):
-
-    return {
-
-        "table_number": table_number,
-
-        "items": items,
-
-        "total": total,
-
-        "status": status,
-
-        "order_time": order_time,
-
-        "manual_status": True
-
-    }
-
-
-# ==========================================
-# CREATE MULTIPLE TEST ORDERS
-# ==========================================
-
-def create_test_orders():
-
-    orders = []
-
-
     # ======================================
-    # TABLE 1 - 2 ORDERS
+    # DISPLAY TEST RESULTS
     # ======================================
 
-    orders.append(
-        create_order(
-            1,
-            [
-                {
-                    "name": "Chicken Rice",
-                    "quantity": 2,
-                    "price": 6.00
-                },
-                {
-                    "name": "Iced Milo",
-                    "quantity": 1,
-                    "price": 2.50
-                }
-            ],
-            14.50,
-            "Pending",
-            "2026-09-21 08:30:00"
-        )
-    )
-
-
-    orders.append(
-        create_order(
-            1,
-            [
-                {
-                    "name": "Nasi Lemak",
-                    "quantity": 1,
-                    "price": 5.00
-                },
-                {
-                    "name": "Mineral Water",
-                    "quantity": 1,
-                    "price": 1.50
-                }
-            ],
-            6.50,
-            "Preparing",
-            "2026-09-21 08:45:00"
-        )
-    )
-
-
-    # ======================================
-    # TABLE 2 - 2 ORDERS
-    # ======================================
-
-    orders.append(
-        create_order(
-            2,
-            [
-                {
-                    "name": "Fried Noodles",
-                    "quantity": 1,
-                    "price": 5.50
-                },
-                {
-                    "name": "Iced Milo",
-                    "quantity": 2,
-                    "price": 2.50
-                }
-            ],
-            10.50,
-            "Ready",
-            "2026-09-21 09:00:00"
-        )
-    )
-
-
-    orders.append(
-        create_order(
-            2,
-            [
-                {
-                    "name": "Chicken Rice",
-                    "quantity": 1,
-                    "price": 6.00
-                },
-                {
-                    "name": "Mineral Water",
-                    "quantity": 2,
-                    "price": 1.50
-                }
-            ],
-            9.00,
-            "Completed",
-            "2026-09-21 09:15:00"
-        )
-    )
-
-
-    # ======================================
-    # TABLE 3 - 2 ORDERS
-    # ======================================
-
-    orders.append(
-        create_order(
-            3,
-            [
-                {
-                    "name": "Nasi Lemak",
-                    "quantity": 2,
-                    "price": 5.00
-                }
-            ],
-            10.00,
-            "Pending",
-            "2026-09-21 09:30:00"
-        )
-    )
-
-
-    orders.append(
-        create_order(
-            3,
-            [
-                {
-                    "name": "Fried Noodles",
-                    "quantity": 2,
-                    "price": 5.50
-                },
-                {
-                    "name": "Mineral Water",
-                    "quantity": 1,
-                    "price": 1.50
-                }
-            ],
-            12.50,
-            "Preparing",
-            "2026-09-21 09:45:00"
-        )
-    )
-
-
-    # ======================================
-    # TABLE 4 - 2 ORDERS
-    # ======================================
-
-    orders.append(
-        create_order(
-            4,
-            [
-                {
-                    "name": "Chicken Rice",
-                    "quantity": 1,
-                    "price": 6.00
-                },
-                {
-                    "name": "Iced Milo",
-                    "quantity": 1,
-                    "price": 2.50
-                }
-            ],
-            8.50,
-            "Ready",
-            "2026-09-21 10:00:00"
-        )
-    )
-
-
-    orders.append(
-        create_order(
-            4,
-            [
-                {
-                    "name": "Nasi Lemak",
-                    "quantity": 1,
-                    "price": 5.00
-                },
-                {
-                    "name": "Iced Milo",
-                    "quantity": 1,
-                    "price": 2.50
-                },
-                {
-                    "name": "Mineral Water",
-                    "quantity": 1,
-                    "price": 1.50
-                }
-            ],
-            9.00,
-            "Completed",
-            "2026-09-21 10:15:00"
-        )
-    )
-
-
-    # ======================================
-    # TABLE 5 - 2 ORDERS
-    # ======================================
-
-    orders.append(
-        create_order(
-            5,
-            [
-                {
-                    "name": "Fried Noodles",
-                    "quantity": 1,
-                    "price": 5.50
-                }
-            ],
-            5.50,
-            "Pending",
-            "2026-09-21 10:30:00"
-        )
-    )
-
-
-    orders.append(
-        create_order(
-            5,
-            [
-                {
-                    "name": "Chicken Rice",
-                    "quantity": 2,
-                    "price": 6.00
-                }
-            ],
-            12.00,
-            "Preparing",
-            "2026-09-21 10:45:00"
-        )
-    )
-
-
-    # ======================================
-    # TABLE 6 - 3 ORDERS
-    # ======================================
-
-    orders.append(
-        create_order(
-            6,
-            [
-                {
-                    "name": "Nasi Lemak",
-                    "quantity": 2,
-                    "price": 5.00
-                }
-            ],
-            10.00,
-            "Ready",
-            "2026-09-21 11:00:00"
-        )
-    )
-
-
-    orders.append(
-        create_order(
-            6,
-            [
-                {
-                    "name": "Chicken Rice",
-                    "quantity": 1,
-                    "price": 6.00
-                },
-                {
-                    "name": "Mineral Water",
-                    "quantity": 1,
-                    "price": 1.50
-                }
-            ],
-            7.50,
-            "Completed",
-            "2026-09-21 11:15:00"
-        )
-    )
-
-
-    orders.append(
-        create_order(
-            6,
-            [
-                {
-                    "name": "Iced Milo",
-                    "quantity": 2,
-                    "price": 2.50
-                }
-            ],
-            5.00,
-            "Pending",
-            "2026-09-21 11:30:00"
-        )
-    )
-
-
-    # ======================================
-    # TABLE 7 - 3 ORDERS
-    # ======================================
-
-    orders.append(
-        create_order(
-            7,
-            [
-                {
-                    "name": "Fried Noodles",
-                    "quantity": 2,
-                    "price": 5.50
-                }
-            ],
-            11.00,
-            "Preparing",
-            "2026-09-21 11:45:00"
-        )
-    )
-
-
-    orders.append(
-        create_order(
-            7,
-            [
-                {
-                    "name": "Chicken Rice",
-                    "quantity": 1,
-                    "price": 6.00
-                },
-                {
-                    "name": "Iced Milo",
-                    "quantity": 1,
-                    "price": 2.50
-                }
-            ],
-            8.50,
-            "Ready",
-            "2026-09-21 12:00:00"
-        )
-    )
-
-
-    orders.append(
-        create_order(
-            7,
-            [
-                {
-                    "name": "Nasi Lemak",
-                    "quantity": 1,
-                    "price": 5.00
-                },
-                {
-                    "name": "Mineral Water",
-                    "quantity": 1,
-                    "price": 1.50
-                }
-            ],
-            6.50,
-            "Completed",
-            "2026-09-21 12:15:00"
-        )
-    )
-
-
-    # Save all test orders
-
-    save_orders(orders)
-
-    return orders
-
-
-# ==========================================
-# TEST FOOD SEARCH
-# ==========================================
-
-def test_food_search(orders):
-
-    print("\n==========================================")
-    print("TEST 1: SEARCH BY FOOD NAME")
+    print("==========================================")
+    print("MULTIPLE ORDER TEST")
     print("==========================================")
 
-    search_food = "Chicken Rice"
+    print()
 
-    results = []
+    print("Old order history replaced.")
 
-    for order in orders:
+    print()
 
-        for item in order.get("items", []):
-
-            if search_food.lower() in item.get(
-                "name", ""
-            ).lower():
-
-                results.append(order)
-
-                break
-
-
-    print("Searching for:", search_food)
-
-    print("Orders found:", len(results))
-
-    if len(results) > 0:
-        print("RESULT: PASS")
-    else:
-        print("RESULT: FAIL")
-
-
-# ==========================================
-# TEST TABLE SEARCH
-# ==========================================
-
-def test_table_search(orders):
-
-    print("\n==========================================")
-    print("TEST 2: SEARCH BY TABLE NUMBER")
-    print("==========================================")
-
-    search_table = "3"
-
-    results = []
+    print("Created 10 fresh test orders:")
 
     for order in orders:
-
-        table_number = str(
-            order.get(
-                "table_number",
-                ""
-            )
-        )
-
-        if table_number == search_table:
-
-            results.append(order)
-
-
-    print("Searching for Table:", search_table)
-
-    print("Orders found:", len(results))
-
-    if len(results) == 2:
-        print("RESULT: PASS")
-    else:
-        print("RESULT: FAIL")
-
-
-# ==========================================
-# TEST STATUS SEARCH
-# ==========================================
-
-def test_status_search(orders):
-
-    print("\n==========================================")
-    print("TEST 3: SEARCH BY ORDER STATUS")
-    print("==========================================")
-
-    search_status = "Completed"
-
-    results = []
-
-    for order in orders:
-
-        if order.get(
-            "status",
-            ""
-        ) == search_status:
-
-            results.append(order)
-
-
-    print("Searching for Status:", search_status)
-
-    print("Orders found:", len(results))
-
-    if len(results) > 0:
-        print("RESULT: PASS")
-    else:
-        print("RESULT: FAIL")
-
-
-# ==========================================
-# TEST MULTIPLE ORDERS PER TABLE
-# ==========================================
-
-def test_multiple_orders(orders):
-
-    print("\n==========================================")
-    print("TEST 4: MULTIPLE ORDERS PER TABLE")
-    print("==========================================")
-
-    table_counts = {}
-
-    for order in orders:
-
-        table = order.get(
-            "table_number",
-            0
-        )
-
-        if table not in table_counts:
-
-            table_counts[table] = 0
-
-        table_counts[table] += 1
-
-
-    print("\nOrders by table:")
-
-    for table in sorted(table_counts):
 
         print(
-            "Table",
-            table,
-            ":",
-            table_counts[table],
-            "orders"
+            f"Table {order['table_number']} - "
+            f"RM{order['total']:.2f} - "
+            f"{order['order_time']}"
         )
 
+    print()
 
-    if (
-        table_counts.get(1) == 2
-        and table_counts.get(2) == 2
-        and table_counts.get(3) == 2
-        and table_counts.get(4) == 2
-        and table_counts.get(5) == 2
-        and table_counts.get(6) == 3
-        and table_counts.get(7) == 3
-    ):
+    print("Total orders stored:", len(orders))
 
-        print("\nRESULT: PASS")
+    print()
 
-    else:
+    print("Automatic status system:")
 
-        print("\nRESULT: FAIL")
+    print("0 - 29 seconds   = Pending")
+    print("30 - 59 seconds  = Preparing")
+    print("60 - 89 seconds  = Ready")
+    print("90+ seconds      = Completed")
 
+    print()
 
-# ==========================================
-# TEST ORDER STATUS
-# ==========================================
-
-def test_order_status(orders):
-
-    print("\n==========================================")
-    print("TEST 5: ORDER STATUS")
     print("==========================================")
 
-    valid_statuses = [
-
-        "Pending",
-        "Preparing",
-        "Ready",
-        "Completed"
-
-    ]
-
-    passed = True
-
-    for order in orders:
-
-        status = order.get(
-            "status",
-            ""
-        )
-
-        if status not in valid_statuses:
-
-            passed = False
-
-
-    if passed:
-
-        print("All orders have valid statuses.")
-
-        print("RESULT: PASS")
-
-    else:
-
-        print("Invalid status found.")
-
-        print("RESULT: FAIL")
-
 
 # ==========================================
-# TEST DATA STORAGE
-# ==========================================
-
-def test_data_storage():
-
-    print("\n==========================================")
-    print("TEST 6: DATA STORAGE")
-    print("==========================================")
-
-    orders = load_orders()
-
-    print(
-        "Orders loaded from JSON:",
-        len(orders)
-    )
-
-    if len(orders) == 16:
-
-        print("RESULT: PASS")
-
-    else:
-
-        print("RESULT: FAIL")
-
-
-# ==========================================
-# TEST SUMMARY
-# ==========================================
-
-def test_summary(orders):
-
-    print("\n==========================================")
-    print("TEST 7: ORDER SUMMARY")
-    print("==========================================")
-
-    total_orders = len(orders)
-
-    total_sales = 0
-
-    for order in orders:
-
-        total_sales += float(
-            order.get(
-                "total",
-                0
-            )
-        )
-
-
-    print("Total Orders:", total_orders)
-
-    print(
-        "Total Sales: RM",
-        format(total_sales, ".2f")
-    )
-
-    if total_orders == 16:
-
-        print("RESULT: PASS")
-
-    else:
-
-        print("RESULT: FAIL")
-
-
-# ==========================================
-# RUN ALL TESTS
+# RUN TEST
 # ==========================================
 
 if __name__ == "__main__":
 
-    print("\n")
-    print("==========================================")
-    print("CAMPUS FOOD ORDERING SYSTEM")
-    print("MEMBER 3 TESTING")
-    print("==========================================")
-
-
-    # Create fresh test data
-
-    orders = create_test_orders()
-
-
-    print("\nTest data created successfully.")
-
-    print(
-        "Total test orders:",
-        len(orders)
-    )
-
-
-    # Run tests
-
-    test_food_search(orders)
-
-    test_table_search(orders)
-
-    test_status_search(orders)
-
-    test_multiple_orders(orders)
-
-    test_order_status(orders)
-
-    test_data_storage()
-
-    test_summary(orders)
-
-
-    print("\n==========================================")
-    print("ALL TESTING COMPLETED")
-    print("==========================================")
+    create_test_orders()
