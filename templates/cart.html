@@ -116,17 +116,36 @@
         </div>
 
 
-        <form action="/checkout"
-              method="POST">
+        <form action="{{ url_for('checkout_order') }}" method="POST">
 
-            <button class="checkout-button"
-                    type="submit">
+    <div class="order-type">
 
-                Confirm Checkout
+        <h3>Order Type</h3>
 
-            </button>
+        <label>
+            <input type="radio"
+                   name="order_type"
+                   value="Dine In"
+                   required>
+            Dine In
+        </label>
 
-        </form>
+        <label>
+            <input type="radio"
+                   name="order_type"
+                   value="Pickup"
+                   required>
+            Pickup
+        </label>
+
+    </div>
+
+    <button class="checkout-button"
+            type="submit">
+        Confirm Checkout
+    </button>
+
+</form>
 
 
     {% else %}

@@ -50,13 +50,14 @@ def remove_item(item_number):
     return True
 
 
-def checkout():
+def checkout(order_type):
     if len(cart) == 0:
         return False
 
     completed_order = {
         "items": [],
-        "total": calculate_total()
+        "total": calculate_total(),
+        "order_type": order_type
     }
 
     for item in cart:

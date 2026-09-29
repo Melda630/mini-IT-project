@@ -144,7 +144,13 @@ def remove(item_number):
 
 @app.route("/checkout", methods=["POST"])
 def checkout_order():
-    success = checkout()
+
+    order_type = request.form.get("order_type")
+
+    if order_type not in ["Dine In", "Pickup"]:
+        return redirect(url_for("view_cart"))
+
+    success = checkout(order_type)
 
     if success:
         return redirect(url_for("history"))

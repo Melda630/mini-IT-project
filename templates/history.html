@@ -46,6 +46,10 @@
                 Order {{ loop.index }}
             </h3>
 
+<p>
+    <strong>Order Type:</strong>
+    {{ order["order_type"] }}
+</p>
 
             {% for item in order.items %}
 
