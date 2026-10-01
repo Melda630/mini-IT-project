@@ -2,1137 +2,134 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Campus Food Ordering System</title>
 
-    <!-- Refresh dashboard every 10 seconds -->
-    <meta http-equiv="refresh" content="10">
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            color: #222;
-        }
-
-        .header {
-            background: #1f2937;
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
-
-        .header h1 {
-            margin: 0;
-        }
-
-        .header p {
-            margin-top: 8px;
-            color: #d1d5db;
-        }
-
-        .container {
-            width: 92%;
-            max-width: 1200px;
-            margin: 25px auto;
-        }
-
-        /* =================================
-           SUMMARY
-        ================================= */
-
-        .summary {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .summary-card {
-            background: white;
-            padding: 18px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            text-align: center;
-        }
-
-        .summary-card h3 {
-            margin: 0 0 8px;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .summary-card p {
-            margin: 0;
-            font-size: 25px;
-            font-weight: bold;
-        }
-
-        /* =================================
-           SECTIONS
-        ================================= */
-
-        .section {
-            background: white;
-            padding: 22px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .section h2 {
-            margin-top: 0;
-        }
-
-        /* =================================
-           SEARCH
-        ================================= */
-
-        .search-form {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        select,
-        input {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        input {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        button {
-            border: none;
-            border-radius: 6px;
-            padding: 10px 16px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .search-button {
-            background: #2563eb;
-            color: white;
-        }
-
-        .search-button:hover {
-            background: #1d4ed8;
-        }
-
-        /* =================================
-           SMART KITCHEN QUEUE
-        ================================= */
-
-        .queue-container {
-            display: grid;
-            grid-template-columns:
-                repeat(auto-fit, minmax(220px, 1fr));
-
-            gap: 15px;
-        }
-
-        .queue-card {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 18px;
-            background: #fafafa;
-        }
-
-        .queue-card h3 {
-            margin-top: 0;
-        }
-
-        .queue-info {
-            margin: 8px 0;
-        }
-
-        .priority {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .pending {
-            color: #d97706;
-        }
-
-        .preparing {
-            color: #2563eb;
-        }
-
-        .ready {
-            color: #16a34a;
-        }
-
-        .completed {
-            color: #6b7280;
-        }
-
-        .empty {
-            color: #777;
-            text-align: center;
-            padding: 20px;
-        }
-
-        /* =================================
-           ORDER TABLE
-        ================================= */
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            background: #1f2937;
-            color: white;
-            padding: 12px;
-            text-align: left;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            vertical-align: top;
-        }
-
-        tr:hover {
-            background: #f9fafb;
-        }
-
-        .status-form {
-            display: flex;
-            gap: 5px;
-        }
-
-        .status-form select {
-            padding: 7px;
-        }
-
-        .update-button {
-            background: #16a34a;
-            color: white;
-            padding: 7px 10px;
-        }
-
-        .delete-button {
-            background: #dc2626;
-            color: white;
-            padding: 7px 10px;
-        }
-
-        .item-list {
-            margin: 0;
-            padding-left: 18px;
-        }
-
-        .total {
-            font-weight: bold;
-        }
-
-        /* =================================
-           RESPONSIVE
-        ================================= */
-
-        @media (max-width: 900px) {
-
-            .summary {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-        }
-
-        @media (max-width: 600px) {
-
-            .summary {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .container {
-                width: 95%;
-            }
-
-            .search-form {
-                flex-direction: column;
-            }
-
-            input,
-            select,
-            button {
-                width: 100%;
-            }
-
-        }
-
-    </style>
-
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 
 <body>
 
+<header>
 
-<!-- ======================================
-     HEADER
-====================================== -->
+    <h1>Campus Food Ordering System</h1>
 
-<div class="header">
+    <nav class="top-nav">
 
-    <h1>
-        Campus Food Ordering System
-    </h1>
+    <a href="{{ url_for('home') }}">
+        Menu
+    </a>
 
-    <p>
-        Admin Order Management Dashboard
-    </p>
+    <a href="{{ url_for('history') }}">
+        Order History
+    </a>
 
-</div>
+    <a href="{{ url_for('admin_login_page') }}">
+        Admin Dashboard
+    </a>
+
+</nav>
+
+
+</header>
 
 
 <div class="container">
 
+    <h2>Food Menu</h2>
 
-<!-- ======================================
-     SUMMARY
-====================================== -->
+    <div class="menu-grid">
 
-<div class="summary">
+        {% for item in menu %}
 
-    <div class="summary-card">
+        <div class="food-card">
 
-        <h3>Total Orders</h3>
+            <h3>{{ item.name }}</h3>
 
-        <p>
-            {{ total_orders }}
-        </p>
+            <p class="price">
+                RM{{ "%.2f"|format(item.price) }}
+            </p>
 
-    </div>
 
+            <form action="/add" method="POST">
 
-    <div class="summary-card">
+                <input type="hidden"
+                       name="item_name"
+                       value="{{ item.name }}">
 
-        <h3>Total Sales</h3>
+                <input type="hidden"
+                       name="price"
+                       value="{{ item.price }}">
 
-        <p>
-            RM {{ "%.2f"|format(total_sales) }}
-        </p>
 
-    </div>
+                <label>Quantity</label>
 
+                <input type="number"
+                       name="quantity"
+                       value="1"
+                       min="1"
+                       required>
 
-    <div class="summary-card">
 
-        <h3>Pending</h3>
+                <button type="submit">
+                    Add to Cart
+                </button>
 
-        <p class="pending">
-            {{ pending }}
-        </p>
-
-    </div>
-
-
-    <div class="summary-card">
-
-        <h3>Preparing</h3>
-
-        <p class="preparing">
-            {{ preparing }}
-        </p>
-
-    </div>
-
-
-    <div class="summary-card">
-
-        <h3>Ready</h3>
-
-        <p class="ready">
-            {{ ready }}
-        </p>
-
-    </div>
-
-
-    <div class="summary-card">
-
-        <h3>Completed</h3>
-
-        <p class="completed">
-            {{ completed }}
-        </p>
-
-    </div>
-
-</div>
-
-
-<!-- ======================================
-     SEARCH
-====================================== -->
-
-<div class="section">
-
-    <h2>
-        Search Orders
-    </h2>
-
-    <form
-        class="search-form"
-        method="POST"
-        action="{{ url_for('search_order') }}"
-    >
-
-        <select
-            name="search_type"
-            id="searchType"
-            onchange="updateSearchPlaceholder()"
-        >
-
-            <option
-                value="food"
-                {% if search_type == "food" %}
-                selected
-                {% endif %}
-            >
-                Food
-            </option>
-
-            <option
-                value="table"
-                {% if search_type == "table" %}
-                selected
-                {% endif %}
-            >
-                Table
-            </option>
-
-            <option
-                value="status"
-                {% if search_type == "status" %}
-                selected
-                {% endif %}
-            >
-                Status
-            </option>
-
-        </select>
-
-
-        <input
-            type="text"
-            name="search"
-            id="searchInput"
-            value="{{ search_value }}"
-            placeholder="Enter food name"
-        >
-
-
-        <button
-            type="submit"
-            class="search-button"
-        >
-            Search
-        </button>
-
-    </form>
-
-</div>
-
-
-<!-- ======================================
-     SMART KITCHEN QUEUE
-====================================== -->
-
-<div class="section">
-
-    <h2>
-        Smart Kitchen Queue
-    </h2>
-
-    <p>
-        Active orders are automatically organised
-        according to status and waiting time.
-    </p>
-
-
-    {% if kitchen_queue %}
-
-        <div class="queue-container">
-
-            {% for order in kitchen_queue %}
-
-                <div class="queue-card">
-
-                    <h3>
-                        Table {{ order.table_number }}
-                    </h3>
-
-
-                    <div class="priority">
-
-                        {% if loop.index == 1 %}
-
-                            🔥 Highest Priority
-
-                        {% elif loop.index == 2 %}
-
-                            High Priority
-
-                        {% else %}
-
-                            Queue Position #{{ loop.index }}
-
-                        {% endif %}
-
-                    </div>
-
-
-                    <div class="queue-info">
-
-                        <strong>
-                            Status:
-                        </strong>
-
-                        <span
-                            class="
-                            {% if order.status == 'Pending' %}
-                                pending
-                            {% elif order.status == 'Preparing' %}
-                                preparing
-                            {% elif order.status == 'Ready' %}
-                                ready
-                            {% endif %}
-                            "
-                        >
-
-                            {{ order.status }}
-
-                        </span>
-
-                    </div>
-
-
-                    <div class="queue-info">
-
-                        <strong>
-                            Waiting:
-                        </strong>
-
-                        {{ order.waiting_minutes }}m
-                        {{ order.waiting_seconds }}s
-
-                    </div>
-
-
-                    <div class="queue-info">
-
-                        <strong>
-                            Estimated Remaining:
-                        </strong>
-
-                        {{ order.estimated_minutes }}m
-                        {{ order.estimated_seconds }}s
-
-                    </div>
-
-
-                    <div class="queue-info">
-
-                        <strong>
-                            Order Time:
-                        </strong>
-
-                        {{ order.order_time }}
-
-                    </div>
-
-                </div>
-
-            {% endfor %}
+            </form>
 
         </div>
 
-    {% else %}
-
-        <div class="empty">
-
-            No active orders in the kitchen queue.
-
-        </div>
-
-    {% endif %}
-
-</div>
-
-
-<!-- ======================================
-     ORDER HISTORY
-====================================== -->
-
-<div class="section">
-
-    {% if search_result is not none %}
-
-        <h2>
-            Search Results
-        </h2>
-
-    {% else %}
-
-        <h2>
-            Order History
-        </h2>
-
-    {% endif %}
-
-
-    <div class="table-wrapper">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        #
-                    </th>
-
-                    <th>
-                        Table
-                    </th>
-
-                    <th>
-                        Items
-                    </th>
-
-                    <th>
-                        Total
-                    </th>
-
-                    <th>
-                        Order Time
-                    </th>
-
-                    <th>
-                        Status
-                    </th>
-
-                    <th>
-                        Actions
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-
-            <!-- =================================
-                 SEARCH RESULTS
-            ================================= -->
-
-            {% if search_result is not none %}
-
-
-                {% if display_orders %}
-
-
-                    {% for result in display_orders %}
-
-                        {% set order = result.order %}
-
-                        {% set actual_index = result.index %}
-
-
-                        <tr>
-
-                            <td>
-                                {{ loop.index }}
-                            </td>
-
-
-                            <td>
-
-                                <strong>
-                                    Table
-                                    {{ order.table_number }}
-                                </strong>
-
-                            </td>
-
-
-                            <td>
-
-                                <ul class="item-list">
-
-                                    {% for item in order["items"] %}
-
-                                        <li>
-
-                                            {{ item.name }}
-
-                                            ×
-
-                                            {{ item.quantity }}
-
-                                        </li>
-
-                                    {% endfor %}
-
-                                </ul>
-
-                            </td>
-
-
-                            <td class="total">
-
-                                RM
-
-                                {{ "%.2f"|format(
-                                    order.total|float
-                                ) }}
-
-                            </td>
-
-
-                            <td>
-
-                                {{ order.order_time }}
-
-                            </td>
-
-
-                            <td>
-
-                                <strong
-                                    class="
-                                    {% if order.status == 'Pending' %}
-                                        pending
-                                    {% elif order.status == 'Preparing' %}
-                                        preparing
-                                    {% elif order.status == 'Ready' %}
-                                        ready
-                                    {% elif order.status == 'Completed' %}
-                                        completed
-                                    {% endif %}
-                                    "
-                                >
-
-                                    {{ order.status }}
-
-                                </strong>
-
-                            </td>
-
-
-                            <td>
-
-                                <form
-                                    class="status-form"
-                                    method="POST"
-                                    action="{{ url_for(
-                                        'update_status',
-                                        order_number=actual_index
-                                    ) }}"
-                                >
-
-                                    <select name="status">
-
-                                        <option
-                                            value="Pending"
-                                            {% if order.status == "Pending" %}
-                                            selected
-                                            {% endif %}
-                                        >
-                                            Pending
-                                        </option>
-
-
-                                        <option
-                                            value="Preparing"
-                                            {% if order.status == "Preparing" %}
-                                            selected
-                                            {% endif %}
-                                        >
-                                            Preparing
-                                        </option>
-
-
-                                        <option
-                                            value="Ready"
-                                            {% if order.status == "Ready" %}
-                                            selected
-                                            {% endif %}
-                                        >
-                                            Ready
-                                        </option>
-
-
-                                        <option
-                                            value="Completed"
-                                            {% if order.status == "Completed" %}
-                                            selected
-                                            {% endif %}
-                                        >
-                                            Completed
-                                        </option>
-
-                                    </select>
-
-
-                                    <button
-                                        type="submit"
-                                        class="update-button"
-                                    >
-                                        Update
-                                    </button>
-
-                                </form>
-
-
-                                <br>
-
-
-                                <a
-                                    href="{{ url_for(
-                                        'delete_order',
-                                        order_number=actual_index
-                                    ) }}"
-                                    onclick="return confirm(
-                                        'Delete this order?'
-                                    );"
-                                >
-
-                                    <button
-                                        type="button"
-                                        class="delete-button"
-                                    >
-                                        Delete
-                                    </button>
-
-                                </a>
-
-                            </td>
-
-                        </tr>
-
-
-                    {% endfor %}
-
-
-                {% else %}
-
-
-                    <tr>
-
-                        <td
-                            colspan="7"
-                            style="text-align:center;"
-                        >
-
-                            No orders found.
-
-                        </td>
-
-                    </tr>
-
-
-                {% endif %}
-
-
-            <!-- =================================
-                 NORMAL ORDER HISTORY
-            ================================= -->
-
-            {% else %}
-
-
-                {% if orders %}
-
-
-                    {% for order in orders %}
-
-
-                        <tr>
-
-                            <td>
-                                {{ loop.index }}
-                            </td>
-
-
-                            <td>
-
-                                <strong>
-                                    Table
-                                    {{ order.table_number }}
-                                </strong>
-
-                            </td>
-
-
-                            <td>
-
-                                <ul class="item-list">
-
-                                    {% for item in order["items"] %}
-
-                                        <li>
-
-                                            {{ item.name }}
-
-                                            ×
-
-                                            {{ item.quantity }}
-
-                                        </li>
-
-                                    {% endfor %}
-
-                                </ul>
-
-                            </td>
-
-
-                            <td class="total">
-
-                                RM
-
-                                {{ "%.2f"|format(
-                                    order.total|float
-                                ) }}
-
-                            </td>
-
-
-                            <td>
-
-                                {{ order.order_time }}
-
-                            </td>
-
-
-                            <td>
-
-                                <strong
-                                    class="
-                                    {% if order.status == 'Pending' %}
-                                        pending
-                                    {% elif order.status == 'Preparing' %}
-                                        preparing
-                                    {% elif order.status == 'Ready' %}
-                                        ready
-                                    {% elif order.status == 'Completed' %}
-                                        completed
-                                    {% endif %}
-                                    "
-                                >
-
-                                    {{ order.status }}
-
-                                </strong>
-
-                            </td>
-
-
-                            <td>
-
-                                <form
-                                    class="status-form"
-                                    method="POST"
-                                    action="{{ url_for(
-                                        'update_status',
-                                        order_number=loop.index0
-                                    ) }}"
-                                >
-
-                                    <select name="status">
-
-                                        <option
-                                            value="Pending"
-                                            {% if order.status == "Pending" %}
-                                            selected
-                                            {% endif %}
-                                        >
-                                            Pending
-                                        </option>
-
-
-                                        <option
-                                            value="Preparing"
-                                            {% if order.status == "Preparing" %}
-                                            selected
-                                            {% endif %}
-                                        >
-                                            Preparing
-                                        </option>
-
-
-                                        <option
-                                            value="Ready"
-                                            {% if order.status == "Ready" %}
-                                            selected
-                                            {% endif %}
-                                        >
-                                            Ready
-                                        </option>
-
-
-                                        <option
-                                            value="Completed"
-                                            {% if order.status == "Completed" %}
-                                            selected
-                                            {% endif %}
-                                        >
-                                            Completed
-                                        </option>
-
-                                    </select>
-
-
-                                    <button
-                                        type="submit"
-                                        class="update-button"
-                                    >
-                                        Update
-                                    </button>
-
-                                </form>
-
-
-                                <br>
-
-
-                                <a
-                                    href="{{ url_for(
-                                        'delete_order',
-                                        order_number=loop.index0
-                                    ) }}"
-                                    onclick="return confirm(
-                                        'Delete this order?'
-                                    );"
-                                >
-
-                                    <button
-                                        type="button"
-                                        class="delete-button"
-                                    >
-                                        Delete
-                                    </button>
-
-                                </a>
-
-                            </td>
-
-                        </tr>
-
-
-                    {% endfor %}
-
-
-                {% else %}
-
-
-                    <tr>
-
-                        <td
-                            colspan="7"
-                            style="text-align:center;"
-                        >
-
-                            No orders found.
-
-                        </td>
-
-                    </tr>
-
-
-                {% endif %}
-
-
-            {% endif %}
-
-
-            </tbody>
-
-        </table>
+        {% endfor %}
 
     </div>
 
+    {% if cart_count > 0 %}
+
+<a href="{{ url_for('view_cart') }}"
+   class="floating-cart">
+
+    <div class="floating-cart-left">
+
+        <span class="cart-icon">🛒</span>
+
+        <div>
+            <strong>
+                {{ cart_count }} item{% if cart_count != 1 %}s{% endif %}
+            </strong>
+
+            <span class="cart-label">
+                Current Cart
+            </span>
+        </div>
+
+    </div>
+
+    <div class="floating-cart-right">
+
+        <strong>
+            RM{{ "%.2f"|format(cart_total) }}
+        </strong>
+
+        <span>
+            View Cart →
+        </span>
+
+    </div>
+
+</a>
+
+{% endif %}
+
+    <a class="main-button"
+       href="/cart">
+
+
+    </a>
+
 </div>
-
-
-</div>
-
-
-<!-- ======================================
-     JAVASCRIPT
-====================================== -->
-
-<script>
-
-function updateSearchPlaceholder() {
-
-    const searchType =
-        document.getElementById(
-            "searchType"
-        ).value;
-
-    const searchInput =
-        document.getElementById(
-            "searchInput"
-        );
-
-
-    if (searchType === "food") {
-
-        searchInput.placeholder =
-            "Enter food name";
-
-    }
-
-    else if (searchType === "table") {
-
-        searchInput.placeholder =
-            "Enter table number";
-
-    }
-
-    else if (searchType === "status") {
-
-        searchInput.placeholder =
-            "Pending, Preparing, Ready or Completed";
-
-    }
-
-}
-
-
-updateSearchPlaceholder();
-
-</script>
-
 
 </body>
 
