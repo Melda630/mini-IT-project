@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Orders</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1>My Orders</h1>
+
+
+<!-- Dine In -->
+
+<h2>Dine In</h2>
+
+<p>Enter your table number to view your current orders.</p>
+
+<form method="GET" action="/my-orders">
+
+    <input
+        type="number"
+        name="table_number"
+        min="1"
+        placeholder="Table Number"
+        required
+    >
+
+    <button type="submit">
+        View Orders
+    </button>
+
+</form>
+
+
+{% if table_number %}
+
+<h2>Current Orders for Table {{ table_number }}</h2>
+
+{% if orders %}
+
+    {% for order in orders %}
+
+    <div class="order">
+
+        <h3>{{ order.order_id }}</h3>
+
+        <p>
+            Order Time: {{ order.time }}
+        </p>
+
+        {% for item in order['items'] %}
+
+        <p>
+            {{ item.name }}
+            × {{ item.quantity }}
+            -
+            RM {{ "%.2f"|format(
+                item.price * item.quantity
+            ) }}
+        </p>
+
+        {% endfor %}
+
+        <p>
+            Order Total:
+            RM {{ "%.2f"|format(order.total) }}
+        </p>
+
+        <p>
+            Status: {{ order.status }}
+        </p>
+
+    </div>
+
+    {% endfor %}
+
+
+    <h3>
+        Current Table Total:
+        RM {{ "%.2f"|format(table_total) }}
+    </h3>
+
+{% else %}
+
+    <p>No ongoing orders found for this table.</p>
+
+{% endif %}
+
+{% endif %}
+
+
+<hr>
+
+
+<!-- Takeaway -->
+
+<h2>Takeaway Order</h2>
+
+<p>Enter your Order ID to view your takeaway order.</p>
+
+<form method="GET" action="/my-orders">
+
+    <input
+        type="text"
+        name="order_id"
+        placeholder="ORD0001"
+        required
+    >
+
+    <button type="submit">
+        Search Order
+    </button>
+
+</form>
+
+
+{% if takeaway_order %}
+
+<div class="order">
+
+    <h3>{{ takeaway_order.order_id }}</h3>
+
+    <p>
+        Order Time: {{ takeaway_order.time }}
+    </p>
+
+    {% for item in takeaway_order['items'] %}
+
+    <p>
+        {{ item.name }}
+        × {{ item.quantity }}
+        -
+        RM {{ "%.2f"|format(
+            item.price * item.quantity
+        ) }}
+    </p>
+
+    {% endfor %}
+
+    <p>
+        Total:
+        RM {{ "%.2f"|format(
+            takeaway_order.total
+        ) }}
+    </p>
+
+    <p>
+        Status:
+        {{ takeaway_order.status }}
+    </p>
+
+</div>
+
+{% endif %}
+
+
+<br>
+
+<a href="/admin">
+    Admin Order Management
+</a>
+
+</body>
+</html>

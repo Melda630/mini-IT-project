@@ -1,3 +1,24 @@
+from flask import Flask, render_template, request, redirect, url_for, session
+
+from ordering import (
+    cart,
+    order_history,
+    add_to_cart,
+    calculate_total,
+    modify_quantity,
+    remove_item,
+    checkout
+)
+from order_history import (
+    add_history,
+    get_current_table_orders,
+    search_by_order_id,
+    search_by_date,
+    get_daily_summary,
+    calculate_table_total,
+    update_history,
+    delete_history
+)
 from flask import Flask, render_template, request, redirect, url_for, flash
 from menu_operations import (
     get_all_items,
@@ -8,11 +29,260 @@ from menu_operations import (
 )
 
 app = Flask(__name__)
-app.secret_key = "campus_food_ordering_system_secret_key"
+
+app.secret_key = "campus-food-secret-key"
+
+ADMIN_ID = "admin"
+ADMIN_PASSWORD = "1234"
+
+menu = [
+    {"name": "Chicken Rice", "price": 6.00},
+    {"name": "Nasi Lemak", "price": 5.00},
+    {"name": "Fried Noodles", "price": 5.50},
+    {"name": "Iced Milo", "price": 2.50},
+    {"name": "Mineral Water", "price": 1.50}
+]
 
 
 @app.route("/")
 def home():
+
+    if "user_type" not in session:
+        session["user_type"] = "guest"
+
+    cart_count = sum(item["quantity"] for item in cart)
+    cart_total = calculate_total()
+
+    return render_template(
+        "index.html",
+        menu=menu,
+        cart_count=cart_count,
+        cart_total=cart_total
+    )
+    
+
+
+    
+
+@app.route("/admin-login")
+def admin_login_page():
+    return render_template("login.html")
+
+
+@app.route("/admin-login-submit", methods=["POST"])
+def admin_login():
+
+    admin_id = request.form["admin_id"]
+    password = request.form["password"]
+
+    if admin_id == ADMIN_ID and password == ADMIN_PASSWORD:
+        session["user_type"] = "admin"
+        return redirect(url_for("admin_dashboard"))
+
+    return render_template(
+        "login.html",
+        error="Invalid admin ID or password"
+    )
+
+
+@app.route("/admin")
+def admin_dashboard():
+
+    if session.get("user_type") != "admin":
+        return redirect(url_for("admin_login_page"))
+
+    selected_date = request.args.get("date")
+    order_id = request.args.get("order_id")
+
+    summary = get_daily_summary()
+    orders = []
+    selected_order = None
+
+    if selected_date:
+        orders = search_by_date(selected_date)
+
+    if order_id and selected_date:
+        results = search_by_order_id(
+            order_id,
+            selected_date
+        )
+
+        if results:
+            selected_order = results[0]
+
+    return render_template(
+        "admin.html",
+        summary=summary,
+        orders=orders,
+        selected_date=selected_date,
+        selected_order=selected_order
+    )
+@app.route("/admin/complete", methods=["POST"])
+def complete_order():
+
+    order_id = request.form.get("order_id")
+    order_date = request.form.get("date")
+
+    update_history(order_id, order_date, "Completed")
+
+    return redirect(
+        url_for(
+            "admin_dashboard",
+            order_id=order_id,
+            date=order_date
+        )
+    )
+
+
+@app.route("/admin/delete", methods=["POST"])
+def delete_order():
+
+    order_id = request.form.get("order_id")
+    order_date = request.form.get("date")
+
+    delete_history(order_id, order_date)
+
+    return redirect(
+        url_for(
+            "admin_dashboard",
+            date=order_date
+        )
+    )
+
+@app.route("/logout")
+def logout():
+
+    session.clear()
+
+    return redirect(url_for("home"))
+
+
+@app.route("/add", methods=["POST"])
+def add_item():
+    item_name = request.form["item_name"]
+    price = float(request.form["price"])
+
+    try:
+        quantity = int(request.form["quantity"])
+    except ValueError:
+        quantity = 0
+
+    add_to_cart(
+        item_name,
+        price,
+        quantity
+    )
+
+    return redirect(url_for("home"))
+
+
+@app.route("/cart")
+def view_cart():
+    return render_template(
+        "cart.html",
+        cart=cart,
+        total=calculate_total()
+    )
+
+
+@app.route("/modify", methods=["POST"])
+def modify_item():
+    try:
+        item_number = int(request.form["item_number"])
+        quantity = int(request.form["quantity"])
+
+        modify_quantity(
+            item_number,
+            quantity
+        )
+
+    except ValueError:
+        pass
+
+    return redirect(url_for("view_cart"))
+
+
+@app.route("/remove/<int:item_number>")
+def remove(item_number):
+    remove_item(item_number)
+
+    return redirect(url_for("view_cart"))
+
+
+@app.route("/checkout", methods=["POST"])
+def checkout_order():
+
+    order_type = request.form.get("order_type")
+    table_number = request.form.get("table_number")
+
+    if order_type not in ["Dine In", "Pickup"]:
+        return redirect(url_for("view_cart"))
+
+    if order_type == "Pickup":
+        table_number = None
+
+    success = checkout(order_type)
+
+    if success:
+        completed_order = order_history[-1]
+
+        saved_order = add_history(
+            table_number,
+            completed_order
+        )
+
+        if order_type == "Dine In":
+            return redirect(
+                url_for(
+                    "my_orders",
+                    table_number=table_number
+                )
+            )
+
+        return redirect(
+            url_for(
+                "my_orders",
+                order_id=saved_order["order_id"]
+            )
+        )
+
+    return redirect(url_for("view_cart"))
+
+
+
+@app.route("/my-orders")
+def my_orders():
+
+    table_number = request.args.get("table_number")
+    order_id = request.args.get("order_id")
+
+    orders = []
+    table_total = 0
+    takeaway_order = None
+
+    if table_number:
+        orders = get_current_table_orders(table_number)
+        table_total = calculate_table_total(orders)
+
+    if order_id:
+        results = search_by_order_id(order_id)
+
+        if results:
+            takeaway_order = results[-1]
+
+    return render_template(
+        "my_order.html",
+        table_number=table_number,
+        orders=orders,
+        table_total=table_total,
+        takeaway_order=takeaway_order
+    )
+
+
+@app.route("/history")
+def history():
+    return redirect(url_for("my_orders"))
+
     return render_template("index.html")
 
 
@@ -110,4 +380,8 @@ def user_interaction():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    import webbrowser
+    from threading import Timer
+
+    Timer(1, lambda: webbrowser.open("http://127.0.0.1:5000")).start()
+    app.run(debug=True, use_reloader=False)

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Order History</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1>Admin Order History</h1>
+
+
+<!-- Last 5 Days -->
+
+<h2>Last 5 Days</h2>
+
+<table border="1">
+
+    <tr>
+        <th>Date</th>
+        <th>Orders</th>
+        <th>Completed</th>
+        <th>Ongoing</th>
+        <th>Sales</th>
+        <th>Action</th>
+    </tr>
+
+    {% for day in summary %}
+
+    <tr>
+        <td>{{ day.date }}</td>
+        <td>{{ day.total_orders }}</td>
+        <td>{{ day.completed_orders }}</td>
+        <td>{{ day.ongoing_orders }}</td>
+        <td>RM {{ "%.2f"|format(day.total_sales) }}</td>
+
+        <td>
+            <a href="/admin?date={{ day.date }}">
+                View Orders
+            </a>
+        </td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+
+<!-- Search -->
+
+<h2>Search Order</h2>
+
+<form method="GET" action="/admin">
+
+    <input
+        type="text"
+        name="order_id"
+        placeholder="Order ID"
+    >
+
+    <input
+        type="date"
+        name="date"
+        required
+    >
+
+    <button type="submit">
+        Search
+    </button>
+
+</form>
+
+
+<!-- Orders From Selected Date -->
+
+{% if selected_date and not selected_order %}
+
+<h2>Orders for {{ selected_date }}</h2>
+
+{% for order in orders %}
+
+<p>
+    {{ order.order_id }}
+
+    | {{ order.order_type }}
+
+    | Table:
+    {{ order.table_number or "-" }}
+
+    | RM {{ "%.2f"|format(order.total) }}
+
+    | {{ order.status }}
+
+    <a href="/admin?order_id={{ order.order_id }}&date={{ order.date }}">
+        View
+    </a>
+</p>
+
+{% else %}
+
+<p>No orders found.</p>
+
+{% endfor %}
+
+{% endif %}
+
+
+<!-- Full Order Details -->
+
+{% if selected_order %}
+
+<h2>Order Details</h2>
+
+<p>
+    Order ID:
+    {{ selected_order.order_id }}
+</p>
+
+<p>
+    Date:
+    {{ selected_order.date }}
+</p>
+
+<p>
+    Order Time:
+    {{ selected_order.time }}
+</p>
+
+<p>
+    Completed Time:
+    {{ selected_order.completed_time or "-" }}
+</p>
+
+<p>
+    Type:
+    {{ selected_order.order_type }}
+</p>
+
+<p>
+    Table:
+    {{ selected_order.table_number or "-" }}
+</p>
+
+
+<h3>Items</h3>
+
+{% for item in selected_order['items'] %}
+
+<p>
+    {{ item.name }}
+    × {{ item.quantity }}
+    -
+    RM {{ "%.2f"|format(item.price * item.quantity) }}
+</p>
+
+{% endfor %}
+
+
+<h3>
+    Total:
+    RM {{ "%.2f"|format(selected_order.total) }}
+</h3>
+
+<p>
+    Status:
+    {{ selected_order.status }}
+</p>
+
+
+{% if selected_order.status == "Ongoing" %}
+
+<form method="POST" action="/admin/complete">
+
+    <input
+        type="hidden"
+        name="order_id"
+        value="{{ selected_order.order_id }}"
+    >
+
+    <input
+        type="hidden"
+        name="date"
+        value="{{ selected_order.date }}"
+    >
+
+    <button type="submit">
+        Complete Order
+    </button>
+
+</form>
+
+{% endif %}
+
+
+<form method="POST" action="/admin/delete">
+
+    <input
+        type="hidden"
+        name="order_id"
+        value="{{ selected_order.order_id }}"
+    >
+
+    <input
+        type="hidden"
+        name="date"
+        value="{{ selected_order.date }}"
+    >
+
+    <button type="submit">
+        Delete Order
+    </button>
+
+</form>
+
+{% endif %}
+
+
+<br>
+
+<a href="/">
+    Customer Page
+</a>
+
+</body>
+</html>
