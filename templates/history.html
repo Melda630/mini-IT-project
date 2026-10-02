@@ -1,102 +1,148 @@
-<!DOCTYPE html>
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block content %}
 
-    <title>Order History</title>
+<!-- Page heading -->
+<div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-</head>
+    <div>
+        <h2 class="fw-bold text-dark mb-1">
+            Order History 📋
+        </h2>
 
-<body>
-
-<header>
-
-    <h1>Campus Food Ordering System</h1>
-
-    <nav>
-        <a href="{{ url_for('home') }}">Menu</a>
-        <a href="/cart">Cart</a>
-        <a href="/history">Order History</a>
-        <a href="{{ url_for('admin_login_page') }}">
-    Admin Dashboard
-</a>
-
-    </nav>
-
-</header>
-
-
-<div class="container">
-
-    <h2>Order History</h2>
-
-
-    {% if order_history %}
-
-        {% for order in order_history %}
-
-        <div class="order-card">
-
-            <h3>
-                Order {{ loop.index }}
-            </h3>
-
-<p>
-    <strong>Order Type:</strong>
-    {{ order["order_type"] }}
-</p>
-
-            {% for item in order.items %}
-
-            <p>
-
-                {{ item.name }}
-                × {{ item.quantity }}
-
-                =
-                RM{{ "%.2f"|format(item.price * item.quantity) }}
-
-            </p>
-
-            {% endfor %}
-
-
-            <strong>
-
-                Total:
-                RM{{ "%.2f"|format(order.total) }}
-
-            </strong>
-
-        </div>
-
-        {% endfor %}
-
-
-    {% else %}
-
-        <p class="empty">
-            No previous orders.
+        <p class="text-muted mb-0">
+            View your completed food orders.
         </p>
+    </div>
 
-    {% endif %}
-
-
-    <a class="main-button"
-       href="/">
-
-        Back to Menu
-
+    <a href="{{ url_for('food_menu') }}"
+       class="btn btn-outline-primary rounded-3 fw-semibold">
+        ← Back to Food Menu
     </a>
 
 </div>
 
 
-</body>
+{% if order_history %}
 
-</html>
+<div class="row g-4">
+
+    {% for order in order_history %}
+
+    <div class="col-12">
+
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+            <!-- Order header -->
+            <div class="card-header bg-dark text-white p-4 border-0">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <span class="text-warning small fw-semibold">
+                            COMPLETED ORDER
+                        </span>
+
+                        <h4 class="fw-bold mb-0 mt-1">
+                            Order #{{ loop.index }}
+                        </h4>
+                    </div>
+
+                    <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+                        {{ order["order_type"] }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Order details -->
+            <div class="card-body p-4">
+
+                <h6 class="fw-bold text-muted mb-3">
+                    ORDER ITEMS
+                </h6>
+
+                {% for item in order["items"] %}
+
+                <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+
+                    <div>
+
+                        <h6 class="fw-bold mb-1">
+                            {{ item["name"] }}
+                        </h6>
+
+                        <span class="text-muted small">
+                            RM{{ "%.2f"|format(item["price"]) }}
+                            ×
+                            {{ item["quantity"] }}
+                        </span>
+
+                    </div>
+
+                    <span class="fw-semibold">
+                        RM{{ "%.2f"|format(item["price"] * item["quantity"]) }}
+                    </span>
+
+                </div>
+
+                {% endfor %}
+
+
+                <!-- Total -->
+                <div class="d-flex justify-content-between align-items-center mt-4">
+
+                    <span class="fs-5 fw-bold">
+                        Total
+                    </span>
+
+                    <span class="fs-3 fw-bold text-success">
+                        RM{{ "%.2f"|format(order["total"]) }}
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+
+{% else %}
+
+<!-- No orders -->
+<div class="card border-0 shadow-sm rounded-4">
+
+    <div class="card-body text-center p-5">
+
+        <div class="display-3 mb-3">
+            📋
+        </div>
+
+        <h3 class="fw-bold">
+            No previous orders
+        </h3>
+
+        <p class="text-muted mb-4">
+            Your completed orders will appear here.
+        </p>
+
+        <a href="{{ url_for('food_menu') }}"
+           class="btn btn-primary btn-lg rounded-3 px-4">
+            Explore Food Menu
+        </a>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

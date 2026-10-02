@@ -1,134 +1,272 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block content %}
 
-    <title>Admin Dashboard - Campus Food Ordering System</title>
+<!-- Admin heading -->
+<div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-</head>
+    <div>
+        <span class="badge bg-warning text-dark mb-2 px-3 py-2 rounded-pill">
+            ADMIN PANEL
+        </span>
 
-<body>
+        <h2 class="fw-bold text-dark mb-1">
+            Admin Dashboard ⚙️
+        </h2>
 
-<header>
-
-    <h1>Admin Dashboard</h1>
-
-    <nav>
-        <a href="/admin">Dashboard</a>
-        <a href="/logout">Logout</a>
-    </nav>
-
-</header>
-
-
-<div class="container">
-
-    <h2>Welcome, Admin</h2>
-
-
-    <!-- CURRENT MENU SECTION -->
-    <div class="order-card">
-
-        <h3>Current Menu</h3>
-
-        {% if menu %}
-
-            {% for item in menu %}
-
-            <p>
-                {{ item["name"] }}
-                -
-                RM{{ "%.2f"|format(item["price"]) }}
-            </p>
-
-            {% endfor %}
-
-        {% else %}
-
-            <p>No menu items available.</p>
-
-        {% endif %}
-
+        <p class="text-muted mb-0">
+            View menu items and monitor customer orders.
+        </p>
     </div>
 
-
-    <!-- CUSTOMER ORDERS SECTION -->
-    <div class="order-card">
-
-        <h3>Customer Orders</h3>
-
-        {% if order_history %}
-
-            {% for order in order_history %}
-
-            <div class="admin-order">
-
-                <h4>
-                    Order {{ loop.index }}
-                </h4>
-
-                {% for item in order["items"] %}
-
-                <p>
-                    {{ item["name"] }}
-                    × {{ item["quantity"] }}
-
-                    =
-
-                    RM{{ "%.2f"|format(
-                        item["price"] * item["quantity"]
-                    ) }}
-                </p>
-
-                {% endfor %}
-
-
-                <strong>
-                    Total:
-                    RM{{ "%.2f"|format(order["total"]) }}
-                </strong>
-
-            </div>
-
-            <hr>
-
-            {% endfor %}
-
-        {% else %}
-
-            <p>No customer orders yet.</p>
-
-        {% endif %}
-
-    </div>
-
-
-    <!-- ADMIN INFORMATION -->
-    <div class="order-card">
-
-        <h3>Admin Functions</h3>
-
-        <p>✓ View current food menu</p>
-
-        <p>✓ View customer orders</p>
-
-        <p>✓ Monitor ordering system</p>
-
-    </div>
-
-
-    <a class="main-button"
-       href="/logout">
+    <a href="{{ url_for('logout') }}"
+       class="btn btn-outline-danger rounded-3 fw-semibold">
         Logout
     </a>
 
 </div>
 
 
-</body>
+<div class="row g-4">
 
-</html>
+    <!-- Current menu -->
+    <div class="col-lg-5">
+
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+
+            <div class="card-header bg-dark text-white border-0 p-4">
+
+                <h4 class="fw-bold mb-1">
+                    🍽️ Current Menu
+                </h4>
+
+                <small class="text-secondary">
+                    Available food items
+                </small>
+
+            </div>
+
+
+            <div class="card-body p-4">
+
+                {% if menu %}
+
+                    {% for item in menu %}
+
+                    <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+
+                        <span class="fw-semibold">
+                            {{ item["name"] }}
+                        </span>
+
+                        <span class="fw-bold text-success">
+                            RM{{ "%.2f"|format(item["price"]) }}
+                        </span>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="text-center py-4">
+
+                        <p class="text-muted mb-0">
+                            No menu items available.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Admin functions -->
+    <div class="col-lg-7">
+
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+
+            <div class="card-header bg-warning text-dark border-0 p-4">
+
+                <h4 class="fw-bold mb-1">
+                    Admin Functions
+                </h4>
+
+                <small>
+                    Ordering system management
+                </small>
+
+            </div>
+
+
+            <div class="card-body p-4">
+
+                <div class="p-3 bg-light rounded-3 mb-3">
+                    <span class="fw-semibold">
+                        ✓ View current food menu
+                    </span>
+                </div>
+
+                <div class="p-3 bg-light rounded-3 mb-3">
+                    <span class="fw-semibold">
+                        ✓ View customer orders
+                    </span>
+                </div>
+
+                <div class="p-3 bg-light rounded-3 mb-3">
+                    <span class="fw-semibold">
+                        ✓ View Dine In and Pickup orders
+                    </span>
+                </div>
+
+                <div class="p-3 bg-light rounded-3">
+                    <span class="fw-semibold">
+                        ✓ Monitor ordering system
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Customer orders -->
+<div class="mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+            <h3 class="fw-bold text-dark mb-1">
+                Customer Orders 📋
+            </h3>
+
+            <p class="text-muted mb-0">
+                Completed customer orders.
+            </p>
+        </div>
+
+        <span class="badge bg-dark rounded-pill px-3 py-2">
+            {{ order_history|length }} Orders
+        </span>
+
+    </div>
+
+
+    {% if order_history %}
+
+        {% for order in order_history %}
+
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+
+            <div class="card-header bg-dark text-white border-0 p-4">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <span class="text-warning small fw-semibold">
+                            CUSTOMER ORDER
+                        </span>
+
+                        <h4 class="fw-bold mb-0 mt-1">
+                            Order #{{ loop.index }}
+                        </h4>
+
+                    </div>
+
+
+                    <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+                        {{ order["order_type"] }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body p-4">
+
+                {% for item in order["items"] %}
+
+                <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+
+                    <div>
+
+                        <h6 class="fw-bold mb-1">
+                            {{ item["name"] }}
+                        </h6>
+
+                        <span class="text-muted small">
+                            RM{{ "%.2f"|format(item["price"]) }}
+                            ×
+                            {{ item["quantity"] }}
+                        </span>
+
+                    </div>
+
+                    <span class="fw-semibold">
+                        RM{{ "%.2f"|format(
+                            item["price"] * item["quantity"]
+                        ) }}
+                    </span>
+
+                </div>
+
+                {% endfor %}
+
+
+                <div class="d-flex justify-content-between align-items-center mt-4">
+
+                    <span class="fs-5 fw-bold">
+                        Order Total
+                    </span>
+
+                    <span class="fs-3 fw-bold text-success">
+                        RM{{ "%.2f"|format(order["total"]) }}
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+        <div class="card border-0 shadow-sm rounded-4">
+
+            <div class="card-body text-center p-5">
+
+                <div class="display-3 mb-3">
+                    📋
+                </div>
+
+                <h4 class="fw-bold">
+                    No customer orders yet
+                </h4>
+
+                <p class="text-muted mb-0">
+                    Completed customer orders will appear here.
+                </p>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

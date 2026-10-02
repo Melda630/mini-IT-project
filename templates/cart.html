@@ -1,172 +1,282 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block content %}
 
-    <title>Your Cart</title>
+<!-- Page heading -->
+<div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-</head>
+    <div>
+        <h2 class="fw-bold text-dark mb-1">
+            Your Cart 🛒
+        </h2>
 
-<body>
-
-<header>
-
-    <h1>Campus Food Ordering System</h1>
-
-
-    <nav class="top-nav">
-
-    <a href="{{ url_for('home') }}">
-        Menu
-    </a>
-
-    <a href="{{ url_for('view_cart') }}">
-        🛒 Cart
-    </a>
-
-    <a href="{{ url_for('history') }}">
-        Order History
-    </a>
-
-    <a href="{{ url_for('admin_login_page') }}">
-        Admin Dashboard
-    </a>
-
-</nav>
-
-
-</header>
-
-
-<div class="container">
-
-    <h2>Your Cart</h2>
-
-
-    {% if cart %}
-
-        {% for item in cart %}
-
-        <div class="cart-item">
-
-            <h3>
-                {{ loop.index }}.
-                {{ item.name }}
-            </h3>
-
-            <p>
-                Price:
-                RM{{ "%.2f"|format(item.price) }}
-            </p>
-
-            <p>
-                Quantity:
-                {{ item.quantity }}
-            </p>
-
-            <p>
-                Subtotal:
-                RM{{ "%.2f"|format(item.price * item.quantity) }}
-            </p>
-
-
-            <form action="/modify"
-                  method="POST">
-
-                <input type="hidden"
-                       name="item_number"
-                       value="{{ loop.index }}">
-
-                <label>
-                    New Quantity
-                </label>
-
-                <input type="number"
-                       name="quantity"
-                       value="{{ item.quantity }}"
-                       min="1"
-                       required>
-
-                <button type="submit">
-                    Update
-                </button>
-
-            </form>
-
-
-            <a class="remove-button"
-               href="/remove/{{ loop.index }}">
-
-                Remove
-
-            </a>
-
-        </div>
-
-        {% endfor %}
-
-
-        <div class="total">
-            Total:
-            RM{{ "%.2f"|format(total) }}
-        </div>
-
-
-        <form action="{{ url_for('checkout_order') }}" method="POST">
-
-    <div class="order-type">
-
-        <h3>Order Type</h3>
-
-        <label>
-            <input type="radio"
-                   name="order_type"
-                   value="Dine In"
-                   required>
-            Dine In
-        </label>
-
-        <label>
-            <input type="radio"
-                   name="order_type"
-                   value="Pickup"
-                   required>
-            Pickup
-        </label>
-
+        <p class="text-muted mb-0">
+            Review your items before placing your order.
+        </p>
     </div>
 
-    <button class="checkout-button"
-            type="submit">
-        Confirm Checkout
-    </button>
-
-</form>
-
-
-    {% else %}
-
-        <p class="empty">
-            Your cart is empty.
-        </p>
-
-    {% endif %}
-
-
-    <a class="main-button"
-       href="/">
-
-        Continue Ordering
-
+    <a href="{{ url_for('food_menu') }}"
+       class="btn btn-outline-primary rounded-3 fw-semibold">
+        ← Continue Ordering
     </a>
 
 </div>
 
 
-</body>
+{% if cart %}
 
-</html>
+<div class="row g-4">
+
+    <!-- Cart items -->
+    <div class="col-lg-8">
+
+        {% for item in cart %}
+
+        <div class="card border-0 shadow-sm rounded-4 mb-3">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-start mb-4">
+
+                    <div>
+
+                        <span class="badge bg-warning text-dark rounded-pill px-3 py-2 mb-2">
+                            Item {{ loop.index }}
+                        </span>
+
+                        <h4 class="fw-bold text-dark mb-1">
+                            {{ item["name"] }}
+                        </h4>
+
+                        <span class="text-muted">
+                            RM{{ "%.2f"|format(item["price"]) }} each
+                        </span>
+
+                    </div>
+
+
+                    <div class="text-end">
+
+                        <small class="text-muted d-block">
+                            Subtotal
+                        </small>
+
+                        <span class="fs-4 fw-bold text-success">
+                            RM{{ "%.2f"|format(
+                                item["price"] * item["quantity"]
+                            ) }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Modify quantity -->
+                <form action="{{ url_for('modify_item') }}"
+                      method="POST"
+                      class="d-flex align-items-end gap-3 flex-wrap">
+
+                    <input type="hidden"
+                           name="item_number"
+                           value="{{ loop.index }}">
+
+                    <div>
+
+                        <label class="form-label fw-semibold">
+                            Quantity
+                        </label>
+
+                        <input type="number"
+                               name="quantity"
+                               value="{{ item["quantity"] }}"
+                               min="1"
+                               required
+                               class="form-control rounded-3"
+                               style="width: 100px;">
+
+                    </div>
+
+
+                    <button type="submit"
+                            class="btn btn-dark rounded-3 px-4">
+                        Update
+                    </button>
+
+
+                    <a href="{{ url_for('remove', item_number=loop.index) }}"
+                       class="btn btn-outline-danger rounded-3 px-4">
+                        Remove
+                    </a>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- Order summary -->
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+            <div class="card-header bg-dark text-white border-0 p-4">
+
+                <h4 class="fw-bold mb-1">
+                    Order Summary
+                </h4>
+
+                <small class="text-secondary">
+                    Review your order
+                </small>
+
+            </div>
+
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between mb-3">
+
+                    <span class="text-muted">
+                        Cart Items
+                    </span>
+
+                    <span class="fw-semibold">
+                        {{ cart|length }}
+                    </span>
+
+                </div>
+
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <span class="fw-bold fs-5">
+                        Total
+                    </span>
+
+                    <span class="fw-bold fs-3 text-success">
+                        RM{{ "%.2f"|format(total) }}
+                    </span>
+
+                </div>
+
+
+                <hr class="mb-4">
+
+
+                <!-- Checkout -->
+                <form action="{{ url_for('checkout_order') }}"
+                      method="POST">
+
+                    <h5 class="fw-bold mb-3">
+                        Order Type
+                    </h5>
+
+
+                    <!-- Dine In -->
+                    <div class="form-check border rounded-3 p-3 ps-5 mb-3">
+
+                        <input class="form-check-input"
+                               type="radio"
+                               name="order_type"
+                               id="dineIn"
+                               value="Dine In"
+                               required>
+
+                        <label class="form-check-label fw-semibold"
+                               for="dineIn">
+                            🍽️ Dine In
+                        </label>
+
+                        <div class="text-muted small">
+                            Enjoy your meal at the cafeteria.
+                        </div>
+
+                    </div>
+
+
+                    <!-- Pickup -->
+                    <div class="form-check border rounded-3 p-3 ps-5 mb-4">
+
+                        <input class="form-check-input"
+                               type="radio"
+                               name="order_type"
+                               id="pickup"
+                               value="Pickup"
+                               required>
+
+                        <label class="form-check-label fw-semibold"
+                               for="pickup">
+                            🥡 Pickup
+                        </label>
+
+                        <div class="text-muted small">
+                            Collect your order when ready.
+                        </div>
+
+                    </div>
+
+
+                    <button type="submit"
+                            class="btn btn-warning btn-lg w-100 rounded-3 fw-bold">
+                        Confirm Checkout
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% else %}
+
+<!-- Empty cart -->
+<div class="card border-0 shadow-sm rounded-4">
+
+    <div class="card-body text-center p-5">
+
+        <div class="display-3 mb-3">
+            🛒
+        </div>
+
+        <h3 class="fw-bold text-dark">
+            Your cart is empty
+        </h3>
+
+        <p class="text-muted mb-4">
+            Add some food from the menu to start your order.
+        </p>
+
+        <a href="{{ url_for('food_menu') }}"
+           class="btn btn-warning btn-lg rounded-3 fw-bold px-4">
+            🍽️ Explore Food Menu
+        </a>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+<!-- Order history -->
+<div class="mt-4">
+
+    <a href="{{ url_for('history') }}"
+       class="btn btn-outline-dark rounded-3">
+        📋 View Order History
+    </a>
+
+</div>
+
+{% endblock %}

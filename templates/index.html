@@ -1,136 +1,193 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Campus Food Ordering System</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-</head>
-
-<body>
-
-<header>
-
-    <h1>Campus Food Ordering System</h1>
-
-    <nav class="top-nav">
-
-    <a href="{{ url_for('home') }}">
-        Menu
-    </a>
-
-    <a href="{{ url_for('history') }}">
-        Order History
-    </a>
-
-    <a href="{{ url_for('admin_login_page') }}">
-        Admin Dashboard
-    </a>
-
-</nav>
-
-
-</header>
-
-
-<div class="container">
-
-    <h2>Food Menu</h2>
-
-    <div class="menu-grid">
-
-        {% for item in menu %}
-
-        <div class="food-card">
-
-            <h3>{{ item.name }}</h3>
-
-            <p class="price">
-                RM{{ "%.2f"|format(item.price) }}
-            </p>
-
-
-            <form action="/add" method="POST">
-
-                <input type="hidden"
-                       name="item_name"
-                       value="{{ item.name }}">
-
-                <input type="hidden"
-                       name="price"
-                       value="{{ item.price }}">
-
-
-                <label>Quantity</label>
-
-                <input type="number"
-                       name="quantity"
-                       value="1"
-                       min="1"
-                       required>
-
-
-                <button type="submit">
-                    Add to Cart
-                </button>
-
-            </form>
-
-        </div>
-
-        {% endfor %}
-
-    </div>
-
-    {% if cart_count > 0 %}
-
-<a href="{{ url_for('view_cart') }}"
-   class="floating-cart">
-
-    <div class="floating-cart-left">
-
-        <span class="cart-icon">🛒</span>
-
-        <div>
-            <strong>
-                {{ cart_count }} item{% if cart_count != 1 %}s{% endif %}
-            </strong>
-
-            <span class="cart-label">
-                Current Cart
-            </span>
-        </div>
-
-    </div>
-
-    <div class="floating-cart-right">
-
-        <strong>
-            RM{{ "%.2f"|format(cart_total) }}
-        </strong>
-
-        <span>
-            View Cart →
+{% block content %}
+<!-- Main Hero Section -->
+<div 
+    class="p-5 mb-4 rounded-4 shadow-sm text-white" 
+    style="background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);">
+    <div 
+        class="container-fluid py-4">
+        <span 
+            class="badge bg-warning text-dark mb-3 px-3 py-2 rounded-pill fw-bold">
+            🎓 Official Cafeteria Portal
         </span>
-
+        <h1 
+            class="display-4 fw-bold mb-3">
+            Skip the Cafeteria Queue! 🍱
+        </h1>
+        <p 
+            class="fs-5 opacity-90 mb-4" 
+            style="max-width: 700px;">
+            Order your favorite meals, drinks, and daily snacks easily before your classes start. Enjoy fast pickup and structured menu navigation.
+        </p>
+        <div 
+            class="d-flex gap-3 flex-wrap">
+            <a 
+                href="{{ url_for('food_menu') }}" 
+                class="btn btn-warning btn-lg px-4 fw-bold rounded-3 shadow-sm">
+                🍽️ Explore Food Menu
+            </a>
+            <a 
+                href="{{ url_for('user_interaction') }}" 
+                class="btn btn-outline-light btn-lg px-4 rounded-3">
+                💬 Submit Feedback
+            </a>
+        </div>
     </div>
-
-</a>
-
-{% endif %}
-
-    <a class="main-button"
-       href="/cart">
-
-
-    </a>
-
 </div>
 
-</body>
+<!-- Quick Statistics -->
+<div 
+    class="row text-center my-5 py-4 bg-white rounded-4 shadow-sm border">
+    <div 
+        class="col-md-3 border-end">
+        <h2 
+            class="fw-bold text-primary display-6 mb-1">
+            5+
+        </h2>
+        <p 
+            class="text-muted mb-0 fw-medium">
+            Active Menu Items
+        </p>
+    </div>
+    <div 
+        class="col-md-3 border-end">
+        <h2 
+            class="fw-bold text-success display-6 mb-1">
+            RM 5.00
+        </h2>
+        <p 
+            class="text-muted mb-0 fw-medium">
+            Average Meal Cost
+        </p>
+    </div>
+    <div 
+        class="col-md-3 border-end">
+        <h2 
+            class="fw-bold text-warning display-6 mb-1">
+            10 Mins
+        </h2>
+        <p 
+            class="text-muted mb-0 fw-medium">
+            Avg. Preparation
+        </p>
+    </div>
+    <div 
+        class="col-md-3">
+        <h2 
+            class="fw-bold text-danger display-6 mb-1">
+            100%
+        </h2>
+        <p 
+            class="text-muted mb-0 fw-medium">
+            Student Friendly
+        </p>
+    </div>
+</div>
 
-</html>
+<!-- Key Features Grid -->
+<div 
+    class="my-5">
+    <div 
+        class="text-center mb-5">
+        <h2 
+            class="fw-bold text-dark mb-2">
+            System Features Breakdown
+        </h2>
+        <p 
+            class="text-muted">
+            Designed to improve the daily campus dining experience
+        </p>
+    </div>
+
+    <div 
+        class="row g-4">
+        <!-- Feature 1 -->
+        <div 
+            class="col-md-4">
+            <div 
+                class="card h-100 border-0 shadow-sm p-4 rounded-4 bg-white">
+                <div 
+                    class="card-body">
+                    <div 
+                        class="fs-1 text-primary mb-3">
+                        📋
+                    </div>
+                    <h4 
+                        class="fw-bold mb-2">
+                        View Food Menu
+                    </h4>
+                    <p 
+                        class="text-muted mb-0">
+                        Detailed display of available food and beverage items along with categories and prices.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div 
+            class="col-md-4">
+            <div 
+                class="card h-100 border-0 shadow-sm p-4 rounded-4 bg-white">
+                <div 
+                    class="card-body">
+                    <div 
+                        class="fs-1 text-success mb-3">
+                        🛠️
+                    </div>
+                    <h4 
+                        class="fw-bold mb-2">
+                        Menu CRUD System
+                    </h4>
+                    <p 
+                        class="text-muted mb-0">
+                        Admin capability to add new meals, update current details, or remove out-of-stock menu items.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div 
+            class="col-md-4">
+            <div 
+                class="card h-100 border-0 shadow-sm p-4 rounded-4 bg-white">
+                <div 
+                    class="card-body">
+                    <div 
+                        class="fs-1 text-warning mb-3">
+                        💬
+                    </div>
+                    <h4 
+                        class="fw-bold mb-2">
+                        User Interaction
+                    </h4>
+                    <p 
+                        class="text-muted mb-0">
+                        Direct interaction hub for students to submit food requests and support feedback.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Info Banner -->
+<div 
+    class="bg-white p-5 rounded-4 shadow-sm border text-center my-5">
+    <h3 
+        class="fw-bold text-dark mb-2">
+        Have Questions or Menu Suggestions?
+    </h3>
+    <p 
+        class="text-muted mb-4">
+        Submit your queries through our dedicated interaction page.
+    </p>
+    <a 
+        href="{{ url_for('user_interaction') }}" 
+        class="btn btn-dark btn-lg px-4 rounded-3">
+        Contact Cafeteria Support
+    </a>
+</div>
+{% endblock %}

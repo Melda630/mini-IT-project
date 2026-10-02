@@ -1,7 +1,32 @@
-# Welcome to GitHub Desktop!
+# Campus Food Ordering System
 
-This is your README. READMEs are where you can communicate what your project is and how to use it.
+A campus food ordering system developed using Python, Flask, HTML and CSS.
 
-Write your name on line 6, save it, and then head back to GitHub Desktop.
-Roshaan
-Thaswirwan Singh
+# Features
+
+- View food menu
+- Search and filter food items
+- Add items to cart
+- Modify item quantity
+- Remove items from cart
+- Calculate total price
+- Dine In or Pickup selection
+- Checkout
+- Order history
+- Admin login
+- Admin dashboard
+- Menu management
+- User feedback and interaction
+
+# Technologies Used
+
+- Python
+- Flask
+- HTML
+- CSS
+
+# Team Members
+
+- Roshaan
+- Thaswirwan Singh
+- Melda Rabbi
