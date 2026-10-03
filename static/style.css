@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* ==========================================
    1. GLOBAL & ROOT VARIABLES
    ========================================== */
@@ -20,41 +19,277 @@
     --transition-smooth: all 0.3s ease-in-out;
 }
 
-/* Base Body Styles */
 body {
-    background-color: var(--light-bg);
-    color: #212529;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    line-height: 1.6;
     margin: 0;
-    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--light-bg);
+    color: #222;
+    line-height: 1.6;
     overflow-x: hidden;
 }
 
-/* ==========================================
-   2. CUSTOM SCROLLBAR
-   ========================================== */
 
-::-webkit-scrollbar {
-    width: 10px;
+/* Header */
+
+header {
+    background-color: #222;
+    color: white;
+    padding: 20px;
+    text-align: center;
 }
 
-::-webkit-scrollbar-track {
-    background: #f1f5f9;
+header h1 {
+    margin: 0 0 15px 0;
 }
 
-::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 5px;
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+nav a:hover {
+    text-decoration: underline;
 }
 
-/* ==========================================
-   3. NAVIGATION BAR STYLING
-   ========================================== */
+.top-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+}
+
+.top-nav a {
+    color: white;
+    text-decoration: none;
+}
+
+
+/* Page container */
+
+.container {
+    width: 85%;
+    max-width: 1000px;
+    margin: 30px auto;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+
+/* Customer food menu */
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(220px, 1fr)
+    );
+    gap: 20px;
+}
+
+.food-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+/* Inputs and buttons */
+
+input[type="number"] {
+    width: 60px;
+    padding: 8px;
+    margin: 10px;
+}
+
+button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #333;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.main-button {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 20px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+
+/* Cart */
+
+.cart-item {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.remove-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 14px;
+    background-color: #b3261e;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.total {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 25px 0;
+}
+
+.checkout-button {
+    font-size: 17px;
+    padding: 13px 25px;
+}
+
+.empty {
+    text-align: center;
+    font-size: 18px;
+}
+
+.error-message {
+    color: #b3261e;
+    font-weight: bold;
+}
+
+
+/* Order cards */
+
+.order-card {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Plain tables (non-Bootstrap) */
+
+table:not(.table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0 25px;
+    background: white;
+}
+
+table:not(.table) th {
+    background: #1f2937;
+    color: white;
+}
+
+table:not(.table) th,
+table:not(.table) td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table:not(.table) tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+
+/* Floating cart */
+
+.floating-cart {
+    position: fixed;
+    left: 50%;
+    bottom: 25px;
+    transform: translateX(-50%);
+    width: 85%;
+    max-width: 650px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    background-color: #222;
+    color: white;
+    border-radius: 16px;
+    text-decoration: none;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+}
+
+.floating-cart:hover {
+    transform: translateX(-50%) translateY(-4px);
+}
+
+.floating-cart-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cart-icon {
+    font-size: 28px;
+}
+
+.floating-cart-left div {
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-label {
+    font-size: 13px;
+    opacity: 0.75;
+}
+
+.floating-cart-right {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    gap: 3px;
+}
+
+.floating-cart-right strong {
+    font-size: 18px;
+}
+
+
+/* Dine in and pickup */
+
+.order-type {
+    margin: 20px 0;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.order-type h3 {
+    margin-bottom: 10px;
+}
+
+.order-type label {
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+
+/* Main navigation */
 
 .navbar {
     background-color: var(--dark-color) !important;
@@ -79,14 +314,13 @@ body {
     transform: translateY(-1px);
 }
 
-/* ==========================================
-   4. HERO BANNER & STATS CARDS
-   ========================================== */
+
+/* Homepage */
 
 .hero-banner {
     background: linear-gradient(
-        135deg, 
-        #0d6efd 0%, 
+        135deg,
+        #0d6efd 0%,
         #0a58ca 100%
     );
     border-radius: 1rem;
@@ -105,9 +339,8 @@ body {
     box-shadow: var(--box-shadow-sm);
 }
 
-/* ==========================================
-   5. FOOD MENU & CARDS STYLING
-   ========================================== */
+
+/* Menu cards */
 
 .card {
     border-radius: 1rem;
@@ -130,9 +363,8 @@ body {
     border-top: 1px solid var(--border-color);
 }
 
-/* ==========================================
-   6. MENU CRUD TABLE & FORMS
-   ========================================== */
+
+/* Menu management */
 
 .crud-form-card {
     background-color: var(--white-color);
@@ -169,9 +401,8 @@ body {
     background-color: #f8fafc;
 }
 
-/* ==========================================
-   7. FORM INPUTS & BUTTONS
-   ========================================== */
+
+/* Forms */
 
 .form-control,
 .form-select {
@@ -208,9 +439,8 @@ body {
     border-color: var(--primary-hover);
 }
 
-/* ==========================================
-   8. BADGES & ALERTS
-   ========================================== */
+
+/* Alerts */
 
 .badge {
     font-weight: 600;
@@ -222,9 +452,8 @@ body {
     box-shadow: var(--box-shadow-sm);
 }
 
-/* ==========================================
-   9. USER INTERACTION HUB
-   ========================================== */
+
+/* User interaction */
 
 .interaction-card {
     background-color: var(--white-color);
@@ -238,16 +467,15 @@ body {
     border-radius: 1rem;
 }
 
-/* ==========================================
-   10. FOOTER STYLING
-   ========================================== */
+
+/* Footer */
 
 footer {
     background-color: var(--dark-color);
     color: #9ca3af;
 }
 
-footer h5, 
+footer h5,
 footer h6 {
     letter-spacing: 0.5px;
 }
@@ -260,123 +488,19 @@ footer a:hover {
     color: var(--warning-color) !important;
 }
 
-/* ==========================================
-   11. RESPONSIVE MEDIA QUERIES
-   ========================================== */
+
+/* Mobile view */
 
 @media (max-width: 768px) {
     .navbar-brand {
         font-size: 1.1rem;
     }
-    
+
     .display-4 {
         font-size: 2.2rem;
     }
-    
+
     .card:hover {
         transform: none;
     }
-=======
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    padding: 30px;
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    color: #222;
-}
-
-h1 {
-    color: #1f2937;
-    margin-bottom: 20px;
-}
-
-h2, h3 {
-    color: #374151;
-}
-
-a {
-    color: #2563eb;
-    text-decoration: none;
-    margin-right: 10px;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-.container {
-    max-width: 1000px;
-    margin: auto;
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-}
-
-nav {
-    margin-bottom: 25px;
-    padding: 12px 0;
-    border-bottom: 1px solid #ddd;
-}
-
-button,
-input[type="submit"] {
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 9px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-button:hover,
-input[type="submit"]:hover {
-    background: #1d4ed8;
-}
-
-input[type="number"],
-input[type="text"],
-input[type="date"],
-input[type="password"] {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    margin: 4px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 15px 0 25px;
-    background: white;
-}
-
-th {
-    background: #1f2937;
-    color: white;
-}
-
-th, td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-tr:nth-child(even) {
-    background: #f8fafc;
-}
-
-form {
-    margin: 10px 0;
-}
-
-hr {
-    border: none;
-    border-top: 1px solid #ddd;
-    margin: 25px 0;
->>>>>>> 9449886 (Complete order history and customer order management)
 }

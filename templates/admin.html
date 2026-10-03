@@ -1,23 +1,104 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
 
-<head>
-    <title>Admin Order History</title>
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-</head>
+{% block content %}
 
-<body>
+<h2>Admin Order History</h2>
 
-<h1>Admin Order History</h1>
+<a href="{{ url_for('logout') }}" class="btn btn-danger mb-3">Logout</a>
 
 
-<!-- Last 5 Days -->
+<!-- Orders from selected date -->
+{% if selected_date and not selected_order %}
 
-<h2>Last 5 Days</h2>
+<h3>Orders for {{ selected_date }}</h3>
 
-<table border="1">
+<table class="table table-bordered">
+    <tr>
+        <th>Order ID</th>
+        <th>Type</th>
+        <th>Table</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
 
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.order_id }}</td>
+        <td>{{ order.order_type }}</td>
+        <td>{{ order.table_number or "-" }}</td>
+        <td>RM {{ "%.2f"|format(order.total) }}</td>
+        <td>{{ order.status }}</td>
+        <td>
+            <a href="{{ url_for('admin_dashboard', order_id=order.order_id, date=order.date) }}">View</a>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="6">No orders found.</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary mb-4">Back to Summary</a>
+
+{% endif %}
+
+
+<!-- Full order details -->
+{% if selected_order %}
+
+<h3>Order Details</h3>
+
+<div class="card p-3 mb-3">
+
+    <p>Order ID: {{ selected_order.order_id }}</p>
+    <p>Date: {{ selected_order.date }}</p>
+    <p>Order Time: {{ selected_order.time }}</p>
+    <p>Completed Time: {{ selected_order.completed_time or "-" }}</p>
+    <p>Type: {{ selected_order.order_type }}</p>
+    <p>Table: {{ selected_order.table_number or "-" }}</p>
+
+    <h5>Items</h5>
+
+    {% for item in selected_order["items"] %}
+    <p>
+        {{ item.name }} × {{ item.quantity }}
+        - RM {{ "%.2f"|format(item.price * item.quantity) }}
+    </p>
+    {% endfor %}
+
+    <h5>Total: RM {{ "%.2f"|format(selected_order.total) }}</h5>
+
+    <p>Status: {{ selected_order.status }}</p>
+
+    {% if selected_order.status == "Ongoing" %}
+    <form method="POST" action="{{ url_for('complete_order') }}">
+        <input type="hidden" name="order_id" value="{{ selected_order.order_id }}">
+        <input type="hidden" name="date" value="{{ selected_order.date }}">
+        <button type="submit" class="btn btn-success">Complete Order</button>
+    </form>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('delete_order') }}">
+        <input type="hidden" name="order_id" value="{{ selected_order.order_id }}">
+        <input type="hidden" name="date" value="{{ selected_order.date }}">
+        <button type="submit" class="btn btn-danger mt-2">Delete Order</button>
+    </form>
+
+</div>
+
+<a href="{{ url_for('admin_dashboard', date=selected_order.date) }}" class="btn btn-secondary mb-4">
+    Back to Orders
+</a>
+
+{% endif %}
+
+
+<!-- Last 5 days -->
+<h3>Last 5 Days</h3>
+
+<table class="table table-bordered">
     <tr>
         <th>Date</th>
         <th>Orders</th>
@@ -28,200 +109,31 @@
     </tr>
 
     {% for day in summary %}
-
     <tr>
         <td>{{ day.date }}</td>
         <td>{{ day.total_orders }}</td>
         <td>{{ day.completed_orders }}</td>
         <td>{{ day.ongoing_orders }}</td>
         <td>RM {{ "%.2f"|format(day.total_sales) }}</td>
-
         <td>
-            <a href="/admin?date={{ day.date }}">
-                View Orders
-            </a>
+            <a href="{{ url_for('admin_dashboard', date=day.date) }}">View Orders</a>
         </td>
     </tr>
-
     {% endfor %}
-
 </table>
 
 
 <!-- Search -->
+<h3>Search Order</h3>
 
-<h2>Search Order</h2>
-
-<form method="GET" action="/admin">
-
-    <input
-        type="text"
-        name="order_id"
-        placeholder="Order ID"
-    >
-
-    <input
-        type="date"
-        name="date"
-        required
-    >
-
-    <button type="submit">
-        Search
-    </button>
-
+<form method="GET" action="{{ url_for('admin_dashboard') }}">
+    <input type="text" name="order_id" placeholder="Order ID">
+    <input type="date" name="date" required>
+    <button type="submit" class="btn btn-dark">Search</button>
 </form>
-
-
-<!-- Orders From Selected Date -->
-
-{% if selected_date and not selected_order %}
-
-<h2>Orders for {{ selected_date }}</h2>
-
-{% for order in orders %}
-
-<p>
-    {{ order.order_id }}
-
-    | {{ order.order_type }}
-
-    | Table:
-    {{ order.table_number or "-" }}
-
-    | RM {{ "%.2f"|format(order.total) }}
-
-    | {{ order.status }}
-
-    <a href="/admin?order_id={{ order.order_id }}&date={{ order.date }}">
-        View
-    </a>
-</p>
-
-{% else %}
-
-<p>No orders found.</p>
-
-{% endfor %}
-
-{% endif %}
-
-
-<!-- Full Order Details -->
-
-{% if selected_order %}
-
-<h2>Order Details</h2>
-
-<p>
-    Order ID:
-    {{ selected_order.order_id }}
-</p>
-
-<p>
-    Date:
-    {{ selected_order.date }}
-</p>
-
-<p>
-    Order Time:
-    {{ selected_order.time }}
-</p>
-
-<p>
-    Completed Time:
-    {{ selected_order.completed_time or "-" }}
-</p>
-
-<p>
-    Type:
-    {{ selected_order.order_type }}
-</p>
-
-<p>
-    Table:
-    {{ selected_order.table_number or "-" }}
-</p>
-
-
-<h3>Items</h3>
-
-{% for item in selected_order['items'] %}
-
-<p>
-    {{ item.name }}
-    × {{ item.quantity }}
-    -
-    RM {{ "%.2f"|format(item.price * item.quantity) }}
-</p>
-
-{% endfor %}
-
-
-<h3>
-    Total:
-    RM {{ "%.2f"|format(selected_order.total) }}
-</h3>
-
-<p>
-    Status:
-    {{ selected_order.status }}
-</p>
-
-
-{% if selected_order.status == "Ongoing" %}
-
-<form method="POST" action="/admin/complete">
-
-    <input
-        type="hidden"
-        name="order_id"
-        value="{{ selected_order.order_id }}"
-    >
-
-    <input
-        type="hidden"
-        name="date"
-        value="{{ selected_order.date }}"
-    >
-
-    <button type="submit">
-        Complete Order
-    </button>
-
-</form>
-
-{% endif %}
-
-
-<form method="POST" action="/admin/delete">
-
-    <input
-        type="hidden"
-        name="order_id"
-        value="{{ selected_order.order_id }}"
-    >
-
-    <input
-        type="hidden"
-        name="date"
-        value="{{ selected_order.date }}"
-    >
-
-    <button type="submit">
-        Delete Order
-    </button>
-
-</form>
-
-{% endif %}
-
 
 <br>
 
-<a href="/">
-    Customer Page
-</a>
+<a href="{{ url_for('food_menu') }}" class="btn btn-secondary">Customer Page</a>
 
-</body>
-</html>
+{% endblock %}
