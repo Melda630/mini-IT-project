@@ -1,4 +1,4 @@
-#CAMPUS FOOD ORDERING SYSTEM
+# CAMPUS FOOD ORDERING SYSTEM
 
 cart = []
 order_history = []

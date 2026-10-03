@@ -1,4 +1,6 @@
-/* Main page */
+/* ==========================================
+   1. GLOBAL & ROOT VARIABLES
+   ========================================== */
 
 :root {
     --primary-color: #0d6efd;
@@ -169,6 +171,11 @@ button:hover {
     font-size: 18px;
 }
 
+.error-message {
+    color: #b3261e;
+    font-weight: bold;
+}
+
 
 /* Order cards */
 
@@ -178,6 +185,32 @@ button:hover {
     margin-bottom: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Plain tables (non-Bootstrap) */
+
+table:not(.table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0 25px;
+    background: white;
+}
+
+table:not(.table) th {
+    background: #1f2937;
+    color: white;
+}
+
+table:not(.table) th,
+table:not(.table) td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table:not(.table) tr:nth-child(even) {
+    background: #f8fafc;
 }
 
 

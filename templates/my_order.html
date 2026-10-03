@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>My Orders</h2>
+
+
+<!-- Dine In -->
+<h3>Dine In</h3>
+
+<p>Enter your table number to view your current orders.</p>
+
+<form method="GET" action="{{ url_for('my_orders') }}">
+    <input type="number" name="table_number" min="1" placeholder="Table Number" required>
+    <button type="submit" class="btn btn-dark">View Orders</button>
+</form>
+
+
+{% if table_number %}
+
+<h3>Current Orders for Table {{ table_number }}</h3>
+
+{% if orders %}
+
+    {% for order in orders %}
+
+    <div class="card p-3 mb-3">
+
+        <h5>{{ order.order_id }}</h5>
+        <p>Order Time: {{ order.time }}</p>
+
+        {% for item in order["items"] %}
+        <p>
+            {{ item.name }} × {{ item.quantity }}
+            - RM {{ "%.2f"|format(item.price * item.quantity) }}
+        </p>
+        {% endfor %}
+
+        <p>Order Total: RM {{ "%.2f"|format(order.total) }}</p>
+        <p>Status: {{ order.status }}</p>
+
+    </div>
+
+    {% endfor %}
+
+    <h4>Current Table Total: RM {{ "%.2f"|format(table_total) }}</h4>
+
+{% else %}
+
+    <p>No ongoing orders found for this table.</p>
+
+{% endif %}
+
+{% endif %}
+
+
+<hr>
+
+
+<!-- Takeaway -->
+<h3>Takeaway Order</h3>
+
+<p>Enter your Order ID to view your takeaway order.</p>
+
+<form method="GET" action="{{ url_for('my_orders') }}">
+    <input type="text" name="order_id" placeholder="ORD0001" required>
+    <button type="submit" class="btn btn-dark">Search Order</button>
+</form>
+
+
+{% if takeaway_order %}
+
+<div class="card p-3 mt-3">
+
+    <h5>{{ takeaway_order.order_id }}</h5>
+    <p>Order Time: {{ takeaway_order.time }}</p>
+
+    {% for item in takeaway_order["items"] %}
+    <p>
+        {{ item.name }} × {{ item.quantity }}
+        - RM {{ "%.2f"|format(item.price * item.quantity) }}
+    </p>
+    {% endfor %}
+
+    <p>Total: RM {{ "%.2f"|format(takeaway_order.total) }}</p>
+    <p>Status: {{ takeaway_order.status }}</p>
+
+</div>
+
+{% endif %}
+
+
+<br>
+
+<a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+    Admin Order Management
+</a>
+
+{% endblock %}

@@ -6,7 +6,6 @@
 
     <div class="col-md-7 col-lg-5">
 
-        <!-- Login heading -->
         <div class="text-center mb-4">
 
             <span class="badge bg-warning text-dark rounded-pill px-3 py-2 mb-3">
@@ -23,8 +22,6 @@
 
         </div>
 
-
-        <!-- Login card -->
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
 
             <div class="card-header bg-dark text-white text-center border-0 p-4">
@@ -39,7 +36,6 @@
 
             </div>
 
-
             <div class="card-body p-4 p-md-5">
 
                 {% if error %}
@@ -51,11 +47,9 @@
 
                 {% endif %}
 
-
                 <form action="{{ url_for('admin_login') }}"
                       method="POST">
 
-                    <!-- Admin ID -->
                     <div class="mb-4">
 
                         <label class="form-label fw-semibold">
@@ -70,8 +64,6 @@
 
                     </div>
 
-
-                    <!-- Password -->
                     <div class="mb-4">
 
                         <label class="form-label fw-semibold">
@@ -86,8 +78,6 @@
 
                     </div>
 
-
-                    <!-- Login button -->
                     <button type="submit"
                             class="btn btn-warning btn-lg w-100 rounded-3 fw-bold">
                         Login as Admin
@@ -99,8 +89,6 @@
 
         </div>
 
-
-        <!-- Back button -->
         <div class="text-center mt-4">
 
             <a href="{{ url_for('home') }}"

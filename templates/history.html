@@ -2,7 +2,6 @@
 
 {% block content %}
 
-<!-- Page heading -->
 <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
 
     <div>
@@ -22,7 +21,6 @@
 
 </div>
 
-
 {% if order_history %}
 
 <div class="row g-4">
@@ -33,7 +31,6 @@
 
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
 
-            <!-- Order header -->
             <div class="card-header bg-dark text-white p-4 border-0">
 
                 <div class="d-flex justify-content-between align-items-center">
@@ -56,8 +53,6 @@
 
             </div>
 
-
-            <!-- Order details -->
             <div class="card-body p-4">
 
                 <h6 class="fw-bold text-muted mb-3">
@@ -90,8 +85,6 @@
 
                 {% endfor %}
 
-
-                <!-- Total -->
                 <div class="d-flex justify-content-between align-items-center mt-4">
 
                     <span class="fs-5 fw-bold">
@@ -114,10 +107,8 @@
 
 </div>
 
-
 {% else %}
 
-<!-- No orders -->
 <div class="card border-0 shadow-sm rounded-4">
 
     <div class="card-body text-center p-5">
